@@ -28,7 +28,6 @@ define(['game/assetPath', 'game/game', 'util/functional'], function (assetPath, 
         },
         create: function () {
             game.audiosprite = game.make.audioSprite('audiosprite');
-            game.stage.addChild(game.audiosprite);
         },
         update: function () {
             F.curry(game.state.start, this.nextState,
