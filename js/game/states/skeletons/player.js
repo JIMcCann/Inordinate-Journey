@@ -5,7 +5,7 @@
     If there's no gravity, can move freely in any direction. */
 define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown, F, VM) {return {
     create: function () {
-        this.player = this.add.sprite(0, 0, 'atlas');
+        this.player = this.add.sprite(0, 0, 'atlas'); // move it during state creation
         this.player.scale.setTo(3, 3);
         // Which frames each animation uses is subject to change as final assets become available.
         this.player.animations.add('idle', 'guy-stand');
@@ -19,6 +19,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.player.body.gravity.y = 700;
         if (!this.groups.player) this.groups.player = this.add.group();
         this.groups.player.add(this.player);
+        this.camera.follow(this.player);
     },
     update: function () {
         if (this.groups.solids)
@@ -29,10 +30,12 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
                     F.curry(this.state.restart, true, false).apply(this.state, this.initargs);
                 });
         if (this.player.gravity.x == 0 && this.player.gravity.y == 0) {
+            this.player.angle = 0;
+            let walkStrength = 100;
             for (let vec of [{x: 1, y: 0}, {x: -1, y: 0}, {x: 0, y: 1}, {x: 0, y: -1}])
                 if (keyDown(VM.direction(vec)) {
-                    this.player.body.velocity.x += vec.x*100;
-                    this.player.body.velocity.y += vec.y*100;
+                    this.player.body.velocity.x += vec.x*walkStrength;
+                    this.player.body.velocity.y += vec.y*walkStrength;
                     this.player.animations.play('walk');
                     if (this.player.body.velocity.x < 0)
                         this.player.scale.x = -Math.abs(this.player.scale.x);
