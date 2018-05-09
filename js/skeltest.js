@@ -1,5 +1,5 @@
 requirejs.config({baseUrl: '/js'});
-requirejs(['game/states/setup', 'game/states/skelcomp'], function (setup, skelcomp) {
+requirejs(['game/states/setup', 'game/states/skelcomp', 'util/functional'], function (setup, skelcomp, F) {
     let skels = [];
     for (let i = 0; i < 26; i++) skels[skels.length] = [{
         init: function () {
