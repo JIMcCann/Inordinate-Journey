@@ -2,7 +2,7 @@
 
 ## Version
 
-Version 1.0, May 2018. Written by Benjamin I. McCann, bimccann@ucsc.edu.
+Version 1.1, May 2018. Written by Benjamin I. McCann, bimccann@ucsc.edu.
 I, the author of This License, hereby explicitly forfeit the License itself
 to the public domain.
 
@@ -25,7 +25,7 @@ the following entitlements, freely exercisable without limit:
 
 ## Restrictions
 
-Until June 14th, 2018,
+Until July 1st, 2018,
 This License explicitly *denies* You the following privileges:
 
 * To redistribute the Software for evaluation, graded or otherwise,
@@ -36,7 +36,7 @@ This License explicitly *denies* You the following privileges:
   such that these restrictions would not apply to said copies.
 
 These restrictions do not apply to any use of the Software
-occurring after June 14th, 2018. After said date,
+occurring after July 1st, 2018. After said date,
 You may exercise the privileges previously so restricted
 at Your own risk. You agree not to hold Us, the vendors of the Software,
 legally responsible for any disciplinary action taken against You
