@@ -5,4 +5,4 @@ so that we can make a commit to attach the announcement to.
 This file will double as a tally of the number of times
 this has been necessary.
 
-Times we've needed to exploit .commit-message-tally: 1
+Times we've needed to exploit .commit-message-tally: 2
