@@ -3,8 +3,9 @@
 define(['game/game', 'util/functional'], function (game, F) {
     let statedef = {
         init: function () {
+            this.initargs = F.arrayOf.apply(F, arguments);
             this.skels = [];
-            for (let param of F.arrayOf.apply(F, arguments)) {
+            for (let param of this.initargs) {
                 let skel = param;
                 let skelinitps = [];
                 if (param instanceof Array) {
