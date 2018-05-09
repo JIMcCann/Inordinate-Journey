@@ -1,7 +1,7 @@
 /*  game/states/skeletons/player
     For use with game/states/skelcomp and game/states/skeletons/groups.
     Standard player character for regular ol' platforming. */
-define(['util/functional', function (F) {return {
+define(['util/functional', 'util/vectorMath'], function (F, VM) {return {
     create: function () {
         this.player = this.add.sprite(0, 0, 'atlas');
         this.player.scale.setTo(3, 3);
@@ -26,7 +26,7 @@ define(['util/functional', function (F) {return {
                 function () {
                     F.curry(this.state.restart, true, false).apply(this.state, this.initargs);
                 });
-        // To do: implement controls using vector math
-        // Needed before this: implement vector math as a separate feature
+        let relativeLeft = VM.normalize(VM.rotate(this.player.gravity, 45));
+        let relativeRight = VM.normalize(VM.rotate(this.player.gravity, -45));
     }
 };});
