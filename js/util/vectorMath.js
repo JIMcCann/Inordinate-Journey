@@ -36,6 +36,12 @@ let VM = {
         else if (a < 45) return 'right';
         else if (a < 135) return 'down';
         else return 'left';
+    },
+    unangle: function (a) {
+        return VM.normalize(VM.vector(Math.cos(a*Math.PI/180), Math.sin(a*Math.PI/180)));
+    },
+    rotate: function (v, a) {
+        return VM.scale(VM.unangle(VM.angle(v) + a), VM.magnitude(v));
     }
 };
 define(VM);
