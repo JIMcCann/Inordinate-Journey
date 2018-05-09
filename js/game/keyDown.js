@@ -17,7 +17,7 @@ define(['game/game'], function (game) {
             keyDown.initialized = true;
         }
         for (let k of [key, equivmap[key]])
-            if (k && keys[k] && keys[k].downDuration(1000/game.time.fps))
+            if (k && keys[k] && keys[k].isDown)
                 return true;
         return false;
     };

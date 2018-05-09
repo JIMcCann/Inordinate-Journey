@@ -18,7 +18,7 @@ let VM = {
         return v.x*u.x + v.y*u.y;
     },
     scale: function (v, s) {
-        return VM.dot(v, VM.vector(s, s));
+        return {x: v.x*s, y: v.y*s};
     },
     magnitude: function (v) {
         return Math.sqrt(VM.dot(v, v));
@@ -27,7 +27,7 @@ let VM = {
         return VM.scale(v, 1/VM.magnitude(v));
     },
     project: function (v, u) {
-        return VM.scale(u, VM.dot(v, VM.normalize(u)));
+        return VM.scale(VM.normalize(u), VM.dot(v, VM.normalize(u)));
     },
     direction: function (v) {
         let a = VM.angle(v);

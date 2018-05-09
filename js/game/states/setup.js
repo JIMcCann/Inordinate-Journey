@@ -14,7 +14,7 @@ define(['game/assetPath', 'game/game', 'util/functional'], function (assetPath, 
         preload: function () {
             Phaser.Canvas.setSmoothingEnabled(game.context, false);
             game.time.advancedTiming = true;
-            game.stage.backgroundColor = '#000000';
+            game.stage.backgroundColor = '#aaaaaa';
             game.load.atlas('atlas',
                 assetPath + '/graphics/atlas.png',
                 assetPath + '/graphics/atlas.json',
