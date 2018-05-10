@@ -4,6 +4,7 @@
     References to groups added to the state should be stored there by name. */
 define({
     init: function () {
+        // literally all it does is add an object to store sprite groups in
         this.groups = {};
     }
 });
