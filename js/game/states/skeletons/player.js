@@ -100,7 +100,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
                 this.player.animations.play('idle'); // then we're actually standing
             // Calculate the vector difference between our velocity
             // and 20% of our projected velocity along the walking axis
-            let v = VM.subtract(this.player.body.velocity
+            let v = VM.subtract(this.player.body.velocity,
                         VM.scale(VM.project(this.player.body.velocity, relativeRight), 0.2));
             // Now that's our new velocity (this slows us down along the walking axis, a la friction)
             this.player.body.velocity.x = v.x;
