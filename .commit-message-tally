@@ -1,0 +1,8 @@
+When there's need for an announcement of some kind,
+perhaps of some changes for which -m is not supported,
+we can just edit this file so that we have changes to commit,
+so that we can make a commit to attach the announcement to.
+This file will double as a tally of the number of times
+this has been necessary.
+
+Times we've needed to exploit .commit-message-tally: 3
