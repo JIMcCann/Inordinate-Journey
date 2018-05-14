@@ -3,8 +3,9 @@
     Standard player character for regular ol' platforming.
     Controls depend on direction of gravity.
     If there's no gravity, can move freely in any direction. */
-define(['game/keyDown', 'util/functional', 'util/vectorMath'],
-function (keyDown, F, VM) {return {
+define(['game/keyDown', 'game/states/fadeOut', 'util/functional',
+    'util/vectorMath'],
+function (keyDown, fadeOut, F, VM) {return {
     create: function () {
         this.player = this.add.sprite(100, 0, 'atlas'); // move it during state creation, top left corner not ideal
         this.player.scale.setTo(1.5, 1.5); // change this depending on size of real assets
@@ -53,8 +54,7 @@ function (keyDown, F, VM) {return {
                     // then restart the level when we touch them
                     // (death could be done more elegantly but we can worry about that later)
                     STATE.game.audiosprite.stop();
-                    F.curry(STATE.state.start, STATE.state.current,
-                        true, false).apply(STATE.state, STATE.initargs);
+                    F.curry(fadeOut, STATE.state.current).apply(null, STATE.initargs);
                 });
         // Velocity achievable by relatively left or right conveyance is capped
         // so we can't zoom off into nowhere
