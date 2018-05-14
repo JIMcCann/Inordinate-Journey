@@ -1,0 +1,160 @@
+{
+  "resources": [
+    "audiosprite.ogg",
+    "audiosprite.m4a",
+    "audiosprite.mp3",
+    "audiosprite.ac3"
+  ],
+  "spritemap": {
+    "hard-land": {
+      "start": 0,
+      "end": 0.5122902494331065,
+      "loop": false
+    },
+    "jump": {
+      "start": 2,
+      "end": 2.164013605442177,
+      "loop": false
+    },
+    "land": {
+      "start": 4,
+      "end": 4.315986394557823,
+      "loop": false
+    },
+    "spacelava": {
+      "start": 6,
+      "end": 80.84401360544217,
+      "loop": false
+    },
+    "step-10": {
+      "start": 82,
+      "end": 82.67192743764173,
+      "loop": false
+    },
+    "step-11": {
+      "start": 84,
+      "end": 84.38458049886621,
+      "loop": false
+    },
+    "step-12": {
+      "start": 86,
+      "end": 86.58775510204082,
+      "loop": false
+    },
+    "step-13": {
+      "start": 88,
+      "end": 88.43102040816326,
+      "loop": false
+    },
+    "step-14": {
+      "start": 90,
+      "end": 90.45424036281179,
+      "loop": false
+    },
+    "step-15": {
+      "start": 92,
+      "end": 92.47165532879819,
+      "loop": false
+    },
+    "step-16": {
+      "start": 94,
+      "end": 94.53260770975056,
+      "loop": false
+    },
+    "step-17": {
+      "start": 96,
+      "end": 96.37587301587301,
+      "loop": false
+    },
+    "step-18": {
+      "start": 98,
+      "end": 98.50068027210884,
+      "loop": false
+    },
+    "step-19": {
+      "start": 100,
+      "end": 100.39328798185942,
+      "loop": false
+    },
+    "step-1": {
+      "start": 102,
+      "end": 102.50068027210884,
+      "loop": false
+    },
+    "step-20": {
+      "start": 104,
+      "end": 104.53551020408163,
+      "loop": false
+    },
+    "step-21": {
+      "start": 106,
+      "end": 106.46294784580499,
+      "loop": false
+    },
+    "step-22": {
+      "start": 108,
+      "end": 108.52680272108843,
+      "loop": false
+    },
+    "step-23": {
+      "start": 110,
+      "end": 110.45133786848072,
+      "loop": false
+    },
+    "step-24": {
+      "start": 112,
+      "end": 112.5035827664399,
+      "loop": false
+    },
+    "step-25": {
+      "start": 114,
+      "end": 114.46294784580499,
+      "loop": false
+    },
+    "step-26": {
+      "start": 116,
+      "end": 116.5035827664399,
+      "loop": false
+    },
+    "step-2": {
+      "start": 118,
+      "end": 118.50068027210884,
+      "loop": false
+    },
+    "step-3": {
+      "start": 120,
+      "end": 120.50648526077097,
+      "loop": false
+    },
+    "step-4": {
+      "start": 122,
+      "end": 122.5297052154195,
+      "loop": false
+    },
+    "step-5": {
+      "start": 124,
+      "end": 124.37587301587301,
+      "loop": false
+    },
+    "step-6": {
+      "start": 126,
+      "end": 126.38458049886621,
+      "loop": false
+    },
+    "step-7": {
+      "start": 128,
+      "end": 128.47746031746033,
+      "loop": false
+    },
+    "step-8": {
+      "start": 130,
+      "end": 130.30331065759637,
+      "loop": false
+    },
+    "step-9": {
+      "start": 132,
+      "end": 132.43102040816328,
+      "loop": false
+    }
+  }
+}
