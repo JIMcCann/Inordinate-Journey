@@ -3,15 +3,18 @@
     Standard player character for regular ol' platforming.
     Controls depend on direction of gravity.
     If there's no gravity, can move freely in any direction. */
-define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown, F, VM) {return {
+define(['game/keyDown', 'util/functional', 'util/vectorMath'],
+function (keyDown, F, VM) {return {
     create: function () {
-        this.player = this.add.sprite(0, 0, 'atlas'); // move it during state creation, top left corner not ideal
-        this.player.scale.setTo(3, 3); // change this depending on size of real assets
+        this.player = this.add.sprite(100, 0, 'atlas'); // move it during state creation, top left corner not ideal
+        this.player.scale.setTo(1.5, 1.5); // change this depending on size of real assets
         // Which frames each animation uses is subject to change as final assets become available.
-        this.player.animations.add('idle', ['guy-stand']);
-        this.player.animations.add('walk', ['guy-walk1', 'guy-walk2', 'guy-walk3', 'guy-walk2'], 10, true);
-        this.player.animations.add('jump', ['guy-walk1']);
-        this.player.animations.add('fall', ['guy-walk3']);
+        this.player.animations.add('idle', ['guy-walk-1']);
+        this.player.animations.add('walk', [
+            'guy-walk-1', 'guy-walk-2', 'guy-walk-3',
+            'guy-walk-4', 'guy-walk-5', 'guy-walk-6'], 10, true);
+        this.player.animations.add('jump', ['guy-walk-5']);
+        this.player.animations.add('fall', ['guy-walk-3']);
         this.player.anchor.setTo(0.5, 1); // Putting the anchor between the character's feet
             // makes a lot of collision / movement / placement related stuff convenient
         this.player.animations.play('fall');
@@ -19,8 +22,23 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.player.body.bounce.y = 0.1; // this may vary
         this.player.body.gravity.y = 600; // this may also vary
         this.camera.follow(this.player); // camera should follow player
+        this.playerStepTimer = 30; // 30 frames until next step noise
     },
     update: function () {
+        // Play step noises
+        if (this.player.animations.name == 'walk') {
+            this.playerStepTimer--;
+            if (this.playerStepTimer <= 0) {
+                this.playerStepTimer = 30;
+                let whichNoise = Math.floor(Math.random()*26) + 1;
+                this.game.audiosprite.play('step-' + whichNoise);
+            }
+        }
+        // Update collision box (TO DO: account for angle)
+        this.player.body.setSize(
+            this.player.width/this.player.scale.x,
+            this.player.height/this.player.scale.y
+        );
         // If the tilemap skeleton (yet to be written) is loaded and it has a solid layer:
         if (this.layers && this.layers.solid)
             this.game.physics.arcade.collide(this.player, this.layers.solid); // then that layer is solid
@@ -28,12 +46,15 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         if (this.groups.solids)
             this.game.physics.arcade.collide(this.player, this.groups.solids); // then they're also solid
         // If any sprites / etc declare themselves dangerous by being in the 'hazards' group:
+        let STATE = this;
         if (this.groups.hazards)
             this.game.physics.arcade.overlap(this.player, this.groups.hazards,
                 function () {
                     // then restart the level when we touch them
                     // (death could be done more elegantly but we can worry about that later)
-                    F.curry(this.state.restart, true, false).apply(this.state, this.initargs);
+                    STATE.game.audiosprite.stop();
+                    F.curry(STATE.state.start, STATE.state.current,
+                        true, false).apply(STATE.state, STATE.initargs);
                 });
         // Velocity achievable by relatively left or right conveyance is capped
         // so we can't zoom off into nowhere
@@ -80,6 +101,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
                 this.player.body.velocity.x += relativeUp.x*jumpStrength; // then we're allowed to jump
                 this.player.body.velocity.y += relativeUp.y*jumpStrength;
                 this.player.animations.play('jump');
+                this.game.audiosprite.play('jump');
             }
             if (['idle', 'walk'].includes(this.player.animations.name) // If we're standing or walking
                     && !this.player.body.blocked[VM.direction(this.player.body.gravity)]) // but not on anything
@@ -93,8 +115,18 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
                         // but headed downward
                 this.player.animations.play('fall'); // then we're actually falling
             if (this.player.animations.name == 'fall' // If we're falling
-                    && this.player.body.blocked[VM.direction(this.player.body.gravity)]) // but just landed
+                    && (this.player.body.blocked[VM.direction(this.player.body.gravity)]
+                        || this.player.body.touching[VM.direction(this.player.body.gravity)])) {
+                            // but just landed
                 this.player.animations.play('walk'); // then we're walking (and possibly about to stand still)
+                // play appropriate landing sound
+                if (!this.player.body.touching[VM.direction(this.player.body.gravity)]) {
+                    // but mute if sprite collision because it's horrible and annoying for some reason
+                if (VM.magnitude(VM.project(this.player.body.velocity, this.player.body.gravity)) > 50)
+                    this.game.audiosprite.play('hard-land'); // hard landing
+                else this.game.audiosprite.play('land'); // soft landing
+                }
+            }
             if (this.player.animations.name == 'walk' && !eitherKeyDown) // If we're walking,
                     // but no longer pressing a key to walk:
                 this.player.animations.play('idle'); // then we're actually standing

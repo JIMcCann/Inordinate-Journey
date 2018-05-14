@@ -24,7 +24,7 @@
     "spacelava": {
       "start": 6,
       "end": 80.84401360544217,
-      "loop": false
+      "loop": true
     },
     "step-10": {
       "start": 82,

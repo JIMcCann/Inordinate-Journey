@@ -14,7 +14,7 @@ define(['game/assetPath', 'game/game', 'util/functional'], function (assetPath, 
         preload: function () {
             Phaser.Canvas.setSmoothingEnabled(game.context, false); // no smooth scaling thanks
             game.time.advancedTiming = true; // in case we need the FPS for anything
-            game.stage.backgroundColor = '#aaaaaa'; // light gray background (might change this?)
+            game.stage.backgroundColor = '#333333'; // dark gray background (might change this?)
             game.load.atlas('atlas', // load the sprite atlas
                 assetPath + '/graphics/atlas.png',
                 assetPath + '/graphics/atlas.json',
@@ -27,7 +27,6 @@ define(['game/assetPath', 'game/game', 'util/functional'], function (assetPath, 
                 assetPath + '/audio/audiosprite.json');
         },
         create: function () {
-            // create the audiosprite and attach it to the game so we can use it from anywhere
             game.audiosprite = game.make.audioSprite('audiosprite');
         },
         update: function () {
