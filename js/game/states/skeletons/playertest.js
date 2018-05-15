@@ -3,25 +3,26 @@
 define(['game/keyDown', 'util/vectorMath'], function (keyDown, VM) {return {
     preload: function () {
         // Load the tilemap for my dumb test map
-        this.load.tilemap('testmap', 'assets/temp/maps/testmap.json', null,
-            Phaser.Tilemap.TILED_JSON);
+        // dont need this.load.tilemap('testmap', 'assets/temp/maps/testmap.json', null,
+        //    Phaser.Tilemap.TILED_JSON);
     },
     create: function () {
         // Use arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         // Put the tilemap in the game
-        this.tilemap = this.add.tilemap('testmap');
+       // this.tilemap = this.add.tilemap('testmap');
         // Assign the loaded tileset (from game/setup) to the tilemap
-        this.tilemap.addTilesetImage('tileset', 'tileset');
+        //this.tilemap.addTilesetImage('tileset', 'tileset');
         // Collide with EVERYTHING
-        this.tilemap.setCollisionBetween(1, 100);
+        //this.tilemap.setCollisionBetween(1, 100);
         // Pull the 'solid' layer out of the tilemap and decide it is in fact solid
-        this.layers = {solid: this.tilemap.createLayer('solid')};
+        //this.layers = {solid: this.tilemap.createLayer('solid')};
         // not sure if this line is necessary???? poss. should remove
-        this.physics.enable(this.layers.solid);
+        //this.physics.enable(this.layers.solid);
         // Set the size of the world to the size of the layer
-        this.layers.solid.resizeWorld();
+        //this.layers.solid.resizeWorld();
         // Play combined bgm
+        this.player.body.collideWorldBounds=true;
         this.game.audiosprite.play('spacelava');
         // Add in a bunch of stuff to provide better representation
         // for the assortment of sprites at our disposal
@@ -30,16 +31,20 @@ define(['game/keyDown', 'util/vectorMath'], function (keyDown, VM) {return {
         this.triangleFlipTimeout = 30;
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
-        let plats = ['1', '2', '3', 'moon'];
-        for (let p of plats) {
-            let plat = this.groups.solids.create(Math.random()*800, Math.random()*600,
-                'atlas', 'platform-' + p);
+        let plats = ['1', '2', '3'];
+        //for (let p of plats) {
+        for( var i = 0; i<10; i++){
+            let x = Math.floor(Math.random() * 3);
+            let plat = this.groups.solids.create(Math.random()*400, i*75,
+                'atlas', 'platform-' + plats[x]);
+            plat.scale.setTo(2);
             plat.body.immovable = true;
-        }
-        let moon = this.add.image(0, 400, 'atlas', 'moon');
-        moon.width = 800;
-        moon.height = 200;
-        moon.sendToBack();
+           }
+        //}
+        //let moon = this.add.image(0, 400, 'atlas', 'moon');
+        //moon.width = 800;
+        //moon.height = 200;
+        //moon.sendToBack();
         this.groups.hazards = this.add.group();
         this.groups.hazards.enableBody = true;
         let lava = this.groups.hazards.create(0, 550, 'atlas', 'lava');
@@ -61,3 +66,4 @@ define(['game/keyDown', 'util/vectorMath'], function (keyDown, VM) {return {
         }
     }
 };});
+
