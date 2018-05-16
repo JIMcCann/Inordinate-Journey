@@ -13,7 +13,6 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         plat.body.checkCollision.down = false;
         plat.body.checkCollision.left = false;
         plat.body.checkCollision.right = false;
-        this.game.world.sendToBack(plat);
         return plat;
     },
     create: function () {
@@ -35,6 +34,8 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.triangleFlipTimeout = 30;
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
+        this.world.sendToBack(this.groups.solids);
+        this.world.sendToBack(this.triangularDude);
         for(let i = -1; i<10; i++)
             this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
