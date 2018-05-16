@@ -2,44 +2,42 @@
     A dumb test map with smiley geometry shapes */
 define(['game/keyDown', 'util/vectorMath'], function (keyDown, VM) {return {
     preload: function () {
-        // Load the tilemap for my dumb test map
-        this.load.tilemap('testmap', 'assets/temp/maps/testmap.json', null,
-            Phaser.Tilemap.TILED_JSON);
+		// Hi!
     },
     create: function () {
+		this.spawnPlatform = function()
+		{
+			// REDUNDANT CODE :: MERGE WITH BELOW
+			let plat = this.groups.solids.create(Math.random()*400, -100,
+            'atlas', 'platform-1');
+			plat.scale.setTo(2);
+            plat.body.immovable = true;
+		}
+		this.timer = this.game.time.create(false);
+		this.timer.loop(1000, this.spawnPlatform, this);
+		
+		this.timer.start();
         // Use arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        // Put the tilemap in the game
-        this.tilemap = this.add.tilemap('testmap');
-        // Assign the loaded tileset (from game/setup) to the tilemap
-        this.tilemap.addTilesetImage('tileset', 'tileset');
-        // Collide with EVERYTHING
-        this.tilemap.setCollisionBetween(1, 100);
-        // Pull the 'solid' layer out of the tilemap and decide it is in fact solid
-        this.layers = {solid: this.tilemap.createLayer('solid')};
-        // not sure if this line is necessary???? poss. should remove
-        this.physics.enable(this.layers.solid);
-        // Set the size of the world to the size of the layer
-        this.layers.solid.resizeWorld();
-        // Play combined bgm
+
+        this.player.body.collideWorldBounds=true;
         this.game.audiosprite.play('spacelava');
-        // Add in a bunch of stuff to provide better representation
-        // for the assortment of sprites at our disposal
+
         this.triangularDude = this.add.image(370, 290, 'atlas', 'triangle-boss');
         this.triangularDude.anchor.setTo(0.4, 1);
         this.triangleFlipTimeout = 30;
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
-        let plats = ['1', '2', '3', 'moon'];
-        for (let p of plats) {
-            let plat = this.groups.solids.create(Math.random()*800, Math.random()*600,
-                'atlas', 'platform-' + p);
+        let plats = ['1', '2', '3'];
+        //for (let p of plats) {
+        for( var i = -1; i<10; i++){
+            let x = Math.floor(Math.random() * 3);
+            let plat = this.groups.solids.create(Math.random()*400, i*75,
+                'atlas', 'platform-' + plats[x]);
+            plat.scale.setTo(2);
             plat.body.immovable = true;
         }
-        let moon = this.add.image(0, 400, 'atlas', 'moon');
-        moon.width = 800;
-        moon.height = 200;
-        moon.sendToBack();
+
         this.groups.hazards = this.add.group();
         this.groups.hazards.enableBody = true;
         let lava = this.groups.hazards.create(0, 550, 'atlas', 'lava');
@@ -47,6 +45,8 @@ define(['game/keyDown', 'util/vectorMath'], function (keyDown, VM) {return {
         lava.height = 50;
     },
     update: function () {
+		
+		this.groups.solids.forEach(function(platform){platform.body.y += 1;});
         // Rotate gravity whenever space is held (assumes the player is loaded into the SSC)
         if (keyDown('spacebar')) {
             let g = VM.rotate(this.player.body.gravity, 5);

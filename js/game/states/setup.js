@@ -14,12 +14,12 @@ define(['game/assetPath', 'game/game', 'util/functional'], function (assetPath, 
         preload: function () {
             Phaser.Canvas.setSmoothingEnabled(game.context, false); // no smooth scaling thanks
             game.time.advancedTiming = true; // in case we need the FPS for anything
-            game.stage.backgroundColor = '#333333'; // dark gray background (might change this?)
+            game.stage.backgroundColor = '#8B4513'; // dark brown background (might change this?)
             game.load.atlas('atlas', // load the sprite atlas
                 assetPath + '/graphics/atlas.png',
                 assetPath + '/graphics/atlas.json',
                 Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
-            game.load.image('tileset', assetPath + '/graphics/tileset.png'); // load the tileset
+            // had this removed game.load.image('tileset', assetPath + '/graphics/tileset.png'); // load the tileset
             game.load.audioSprite('audiosprite', // load the audiosprite
                 [assetPath + '/audio/audiosprite.mp3',
                  assetPath + '/audio/audiosprite.ogg',
