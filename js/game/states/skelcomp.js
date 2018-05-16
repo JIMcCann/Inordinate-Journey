@@ -15,6 +15,7 @@ define(['game/game', 'util/functional'], function (game, F) {
             }
         },
         updateMethods: function () {
+            // Catalog all the methods we have on all our skeletons.
             let self = this;
             let skelMeths = {};
             let protectedMeths = ['init', 'preload', 'create', 'update', 'render'];
@@ -22,6 +23,7 @@ define(['game/game', 'util/functional'], function (game, F) {
                 for (let k in skel)
                     if (!protectedMeths.includes(k))
                         skelMeths[k] = true;
+            // Put them all on the compositor.
             for (let k in skelMeths) if (!this[k])
                 this[k] = function () {
                     self.eachSkel(k, arguments);
@@ -68,10 +70,10 @@ define(['game/game', 'util/functional'], function (game, F) {
         addSkel: function (skel) {
             let skelinitps = F.arrayOf.apply(F, arguments).slice(1);
             this.skels[this.skels.length] = skel;
+            this.updateMethods();
             if (skel.init) skel.init.apply(this, skelinitps);
             if (skel.preload) skel.preload.call(this);
             if (skel.create) skel.create.call(this);
-            this.updateMethods();
         }
     };
     // add the SSC to the game
