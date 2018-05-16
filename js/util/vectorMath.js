@@ -49,6 +49,13 @@ let VM = {
         // and returns the first vector's component along that axis.
         return VM.scale(VM.normalize(u), VM.dot(v, VM.normalize(u)));
     },
+    scalarProject: function (v, u) {
+        // scalarProject: Scalar projection.
+        // Treats the second vector as an axis,
+        // and returns the first vector's component along that axis
+        // AS A SCALAR.
+        return VM.dot(v, u)/(VM.magnitude(v)*VM.magnitude(u));
+    },
     direction: function (v) {
         // direction: Decides which of the four keyboard directions
         // most closely aligns to the direction of the given vector.

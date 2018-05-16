@@ -104,7 +104,9 @@ function (keyDown, fadeOut, F, VM) {return {
                 this.game.audiosprite.play('jump');
             }
             if (['idle', 'walk'].includes(this.player.animations.name) // If we're standing or walking
-                    && !this.player.body.blocked[VM.direction(this.player.body.gravity)]) // but not on anything
+                    && !(this.player.body.blocked[VM.direction(this.player.body.gravity)]
+                         || this.player.body.touching[VM.direction(this.player.body.gravity)]))
+                            // but not on anything
                 this.player.animations.play('fall'); // then we should fall
             if (VM.angle(VM.project(this.player.body.velocity, relativeRight)) != 0)
                     // If we're going "backward"-ish (left when gravity is downward)
@@ -114,18 +116,17 @@ function (keyDown, fadeOut, F, VM) {return {
                     && VM.angle(VM.project(this.player.body.velocity, this.player.body.gravity)) == 90)
                         // but headed downward
                 this.player.animations.play('fall'); // then we're actually falling
-            if (this.player.animations.name == 'fall' // If we're falling
+            if (['fall', 'jump'].includes(this.player.animations.name) // If we're falling
                     && (this.player.body.blocked[VM.direction(this.player.body.gravity)]
-                        || this.player.body.touching[VM.direction(this.player.body.gravity)])) {
+                        || this.player.body.touching[VM.direction(this.player.body.gravity)])
+                    && VM.scalarProject(this.player.body.velocity, this.player.body.gravity) > 0) {
+                        console.log("HELP");
                             // but just landed
                 this.player.animations.play('walk'); // then we're walking (and possibly about to stand still)
                 // play appropriate landing sound
-                if (!this.player.body.touching[VM.direction(this.player.body.gravity)]) {
-                    // but mute if sprite collision because it's horrible and annoying for some reason
                 if (VM.magnitude(VM.project(this.player.body.velocity, this.player.body.gravity)) > 50)
                     this.game.audiosprite.play('hard-land'); // hard landing
                 else this.game.audiosprite.play('land'); // soft landing
-                }
             }
             if (this.player.animations.name == 'walk' && !eitherKeyDown) // If we're walking,
                     // but no longer pressing a key to walk:
