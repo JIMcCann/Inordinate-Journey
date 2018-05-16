@@ -2,21 +2,61 @@
     Takes arbitrarily many Phaser state definitions and smashes them together into one state. */
 define(['game/game', 'util/functional'], function (game, F) {
     let statedef = {
+        eachSkel: function (k, args) {
+            let retval = [];
+            for (let skel of this.skels) if (skel[k]) { // For each skeleton that supports the method:
+                let r = skel[k].apply(this, args); // Call it
+                if (r) retval[retval.length] = r; // Add it to return value if it returned anything
+            }
+            switch (retval.length) {
+                case 0: return undefined; // Return nothing if nothing returned anything
+                case 1: return retval[0]; // Return the only result if there was only one
+                default: return retval; // Otherwise return the whole array
+            }
+        },
+        updateMethods: function () {
+            let self = this;
+            let skelMeths = {};
+            let protectedMeths = ['init', 'preload', 'create', 'update', 'render'];
+            for (let skel in this.skels)
+                for (let k in skel)
+                    if (skelMeths[k] instanceof Function && !protectedMeths.includes(k))
+                        skelMeths[k] = true;
+            for (let k in skelMeths) if (!this[k])
+                this[k] = function () {
+                    self.eachSkel(k, arguments);
+                };
+        },
         init: function () {
             this.initargs = F.arrayOf.apply(F, arguments);
             this.skels = []; // we need to figure out what skeletons we have
+            let skelinitps = [];
+
             for (let param of this.initargs) { // for each argument given to init:
                 let skel = param; // assume the argument is a skeleton
-                let skelinitps = []; // with no init arguments
+                let thisskelinitps = []; // with no init arguments
                 if (param instanceof Array) { // BUT, if the argument is an array:
                     skel = param[0]; // then it's NOT a skeleton, its first element is
-                    skelinitps = param.slice(1); // and the rest is init arguments to that skeleton
+                    thisskelinitps = param.slice(1); // and the rest is init arguments to that skeleton
                 }
+
                 // once we've figured out what the skeleton is,
                 this.skels[this.skels.length] = skel; // add it to what skeletons we have
-                if (skel.init) skel.init.apply(this, skelinitps); // and do its init
+                skelinitps[skelinitps.length] = thisskelinitps; // and add the init parameters
             }
+
+            // add the rest of the state functions to the skeleton compositor
+            this.updateMethods();
+
+            // finally do all skeletons' inits
+            for (let i = 0; i < this.skels.length; i++)
+                if (this.skels[i].init)
+                    this.skels[i].init.apply(this, skelinitps[i]);
         },
+        preload: function () {this.eachSkel('preload');},
+        create: function () {this.eachSkel('create');},
+        update: function () {this.eachSkel('update');},
+        render: function () {this.eachSkel('render');},
         // addSkel()
         // Add a skeleton to the compositor, and then run the skeleton's
         // init, preload, and create, in that order.
@@ -31,15 +71,9 @@ define(['game/game', 'util/functional'], function (game, F) {
             if (skel.init) skel.init.apply(this, skelinitps);
             if (skel.preload) skel.preload.call(this);
             if (skel.create) skel.create.call(this);
+            this.updateMethods();
         }
     };
-    // add the rest of the state functions to the skeleton compositor
-    for (let f of ['preload', 'create', 'update']) F.using(statedef, function () {
-        this[f] = function () {
-            // each such function should just call all the skeletons' corresponding functions
-            for (let skel of this.skels) if (skel[f]) skel[f].call(this);
-        }
-    });
     // add the SSC to the game
     game.state.add('skelcomp', statedef);
     // export a function that forwards all its arguments to skelcomp's init

@@ -20,7 +20,7 @@ function (keyDown, fadeOut, F, VM) {return {
             // makes a lot of collision / movement / placement related stuff convenient
         this.player.animations.play('fall');
         this.game.physics.arcade.enable(this.player); // we want physics for the character
-        this.player.body.bounce.y = 0.1; // this may vary
+        this.player.body.bounce.y = 0; // this may vary
         this.player.body.gravity.y = 600; // this may also vary
         this.camera.follow(this.player); // camera should follow player
         this.playerStepTimer = 30; // 30 frames until next step noise
@@ -45,7 +45,12 @@ function (keyDown, fadeOut, F, VM) {return {
             this.game.physics.arcade.collide(this.player, this.layers.solid); // then that layer is solid
         // If any sprites / etc declare themselves solid by being in the 'solids' group:
         if (this.groups.solids)
-            this.game.physics.arcade.collide(this.player, this.groups.solids); // then they're also solid
+            this.game.physics.arcade.collide(this.player, this.groups.solids, // then they're also solid
+                function (player, solid) { // and the player should move with them due to friction
+                                            // if they're moving
+                    player.body.velocity.x += solid.body.velocity.x
+                    player.body.velocity.y += solid.body.velocity.y
+                });
         // If any sprites / etc declare themselves dangerous by being in the 'hazards' group:
         let STATE = this;
         if (this.groups.hazards)

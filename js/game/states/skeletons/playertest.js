@@ -3,6 +3,7 @@
 define(['game/keyDown', 'util/vectorMath'], function (keyDown, VM) {return {
     preload: function () {
 		// Hi!
+		// wEELLLLl heLLO theR
     },
     create: function () {
 		this.spawnPlatform = function()
@@ -15,7 +16,7 @@ define(['game/keyDown', 'util/vectorMath'], function (keyDown, VM) {return {
 		}
 		this.timer = this.game.time.create(false);
 		this.timer.loop(1000, this.spawnPlatform, this);
-		
+
 		this.timer.start();
         // Use arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -45,7 +46,7 @@ define(['game/keyDown', 'util/vectorMath'], function (keyDown, VM) {return {
         lava.height = 50;
     },
     update: function () {
-		
+
 		this.groups.solids.forEach(function(platform){platform.body.y += 1;});
         // Rotate gravity whenever space is held (assumes the player is loaded into the SSC)
         if (keyDown('spacebar')) {
