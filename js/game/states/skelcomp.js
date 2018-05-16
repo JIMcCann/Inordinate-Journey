@@ -16,6 +16,21 @@ define(['game/game', 'util/functional'], function (game, F) {
                 this.skels[this.skels.length] = skel; // add it to what skeletons we have
                 if (skel.init) skel.init.apply(this, skelinitps); // and do its init
             }
+        },
+        // addSkel()
+        // Add a skeleton to the compositor, and then run the skeleton's
+        // init, preload, and create, in that order.
+        // This function is intended for extending the functionality of the state
+        // after the state has already been switched to,
+        // e.g. you could use this to make the player come out of the portal.
+        // The first argument should be the skeleton itself.
+        // Any additional arguments are treated as init parameters for the skeleton.
+        addSkel: function (skel) {
+            let skelinitps = F.arrayOf.apply(F, arguments).slice(1);
+            this.skels[this.skels.length] = skel;
+            if (skel.init) skel.init.apply(this, skelinitps);
+            if (skel.preload) skel.preload.call(this);
+            if (skel.create) skel.create.call(this);
         }
     };
     // add the rest of the state functions to the skeleton compositor
