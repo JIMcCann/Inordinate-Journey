@@ -9,12 +9,16 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         let plat = this.groups.solids.create(x, y, 'atlas', name);
         plat.scale.setTo(2);
         plat.body.immovable = true;
-        plat.body.velocity.y = 75;
+        plat.body.velocity.y = 60;
+        plat.body.checkCollision.down = false;
+        plat.body.checkCollision.left = false;
+        plat.body.checkCollision.right = false;
+        this.game.world.sendToBack(plat);
         return plat;
     },
     create: function () {
 		this.timer = this.game.time.create(false);
-		this.timer.loop(1000, function () {
+		this.timer.loop(1300, function () {
 		    this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
 		        Math.random()*400, -100);
 		}, this);

@@ -105,22 +105,22 @@ function (keyDown, fadeOut, F, VM) {return {
             }
             if (['idle', 'walk'].includes(this.player.animations.name) // If we're standing or walking
                     && !(this.player.body.blocked[VM.direction(this.player.body.gravity)]
-                         || this.player.body.touching[VM.direction(this.player.body.gravity)]))
+                         || this.player.body.touching[VM.direction(this.player.body.gravity)])) {
                             // but not on anything
                 this.player.animations.play('fall'); // then we should fall
+            }
             if (VM.angle(VM.project(this.player.body.velocity, relativeRight)) != 0)
                     // If we're going "backward"-ish (left when gravity is downward)
                 this.player.scale.x = -Math.abs(this.player.scale.x); // face backward
             else this.player.scale.x = Math.abs(this.player.scale.x); // otherwise face forward (usually right)
             if (this.player.animations.name == 'jump' // If we're jumping
-                    && VM.angle(VM.project(this.player.body.velocity, this.player.body.gravity)) == 90)
+                    && VM.scalarProject(this.player.body.velocity, this.player.body.gravity) > 0)
                         // but headed downward
                 this.player.animations.play('fall'); // then we're actually falling
             if (['fall', 'jump'].includes(this.player.animations.name) // If we're falling
                     && (this.player.body.blocked[VM.direction(this.player.body.gravity)]
                         || this.player.body.touching[VM.direction(this.player.body.gravity)])
                     && VM.scalarProject(this.player.body.velocity, this.player.body.gravity) > 0) {
-                        console.log("HELP");
                             // but just landed
                 this.player.animations.play('walk'); // then we're walking (and possibly about to stand still)
                 // play appropriate landing sound

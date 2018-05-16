@@ -19,7 +19,7 @@ let VM = {
     angle: function (v) {
         // angle: Calculates the facing of the vector, in clockwise degrees
         // where 0deg = right.
-        return Math.atan2(v.y, v.x)*180/Math.PI;
+        return Math.atan2(v.y, v.x)*180.0/Math.PI;
     },
     dot: function (v, u) {
         // dot: Dot product. Sum of the products of the components.
@@ -41,7 +41,7 @@ let VM = {
     normalize: function (v) {
         // normalize: Vector normalization.
         // Returns the unit vector in the same direction as the argument.
-        return VM.scale(v, 1/VM.magnitude(v));
+        return VM.scale(v, 1.0/VM.magnitude(v));
     },
     project: function (v, u) {
         // project: Vector projection.
@@ -54,7 +54,7 @@ let VM = {
         // Treats the second vector as an axis,
         // and returns the first vector's component along that axis
         // AS A SCALAR.
-        return VM.dot(v, u)/(VM.magnitude(v)*VM.magnitude(u));
+        return VM.dot(v, u)*1.0/(VM.magnitude(v)*VM.magnitude(u));
     },
     direction: function (v) {
         // direction: Decides which of the four keyboard directions
