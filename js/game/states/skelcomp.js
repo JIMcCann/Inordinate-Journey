@@ -18,9 +18,9 @@ define(['game/game', 'util/functional'], function (game, F) {
             let self = this;
             let skelMeths = {};
             let protectedMeths = ['init', 'preload', 'create', 'update', 'render'];
-            for (let skel in this.skels)
+            for (let skel of this.skels)
                 for (let k in skel)
-                    if (skelMeths[k] instanceof Function && !protectedMeths.includes(k))
+                    if (!protectedMeths.includes(k))
                         skelMeths[k] = true;
             for (let k in skelMeths) if (!this[k])
                 this[k] = function () {

@@ -45,12 +45,7 @@ function (keyDown, fadeOut, F, VM) {return {
             this.game.physics.arcade.collide(this.player, this.layers.solid); // then that layer is solid
         // If any sprites / etc declare themselves solid by being in the 'solids' group:
         if (this.groups.solids)
-            this.game.physics.arcade.collide(this.player, this.groups.solids, // then they're also solid
-                function (player, solid) { // and the player should move with them due to friction
-                                            // if they're moving
-                    player.body.velocity.x += solid.body.velocity.x
-                    player.body.velocity.y += solid.body.velocity.y
-                });
+            this.game.physics.arcade.collide(this.player, this.groups.solids); // then they're also solid
         // If any sprites / etc declare themselves dangerous by being in the 'hazards' group:
         let STATE = this;
         if (this.groups.hazards)
@@ -88,7 +83,7 @@ function (keyDown, fadeOut, F, VM) {return {
             }
         } else { // If there's gravity:
             let walkStrength = 100;
-            let jumpStrength = 300;
+            let jumpStrength = 370;
             this.player.angle = VM.angle(this.player.body.gravity) - 90; // Rotate sprite according to gravity
             let relativeLeft = VM.normalize(VM.rotate(this.player.body.gravity, 90)); // Determine walking dirs
             let relativeRight = VM.normalize(VM.rotate(this.player.body.gravity, -90));

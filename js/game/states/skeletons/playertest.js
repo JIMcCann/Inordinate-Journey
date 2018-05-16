@@ -1,21 +1,23 @@
 /*  game/states/skeletons/playertest
     A dumb test map with smiley geometry shapes */
-define(['game/keyDown', 'util/vectorMath'], function (keyDown, VM) {return {
+define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown, F, VM) {return {
     preload: function () {
 		// Hi!
 		// wEELLLLl heLLO theR
     },
+    spawnPlatform: function (name, x, y) {
+        let plat = this.groups.solids.create(x, y, 'atlas', name);
+        plat.scale.setTo(2);
+        plat.body.immovable = true;
+        plat.body.velocity.y = 75;
+        return plat;
+    },
     create: function () {
-		this.spawnPlatform = function()
-		{
-			// REDUNDANT CODE :: MERGE WITH BELOW
-			let plat = this.groups.solids.create(Math.random()*400, -100,
-            'atlas', 'platform-1');
-			plat.scale.setTo(2);
-            plat.body.immovable = true;
-		}
 		this.timer = this.game.time.create(false);
-		this.timer.loop(1000, this.spawnPlatform, this);
+		this.timer.loop(1000, function () {
+		    this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
+		        Math.random()*400, -100);
+		}, this);
 
 		this.timer.start();
         // Use arcade physics
@@ -29,15 +31,9 @@ define(['game/keyDown', 'util/vectorMath'], function (keyDown, VM) {return {
         this.triangleFlipTimeout = 30;
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
-        let plats = ['1', '2', '3'];
-        //for (let p of plats) {
-        for( var i = -1; i<10; i++){
-            let x = Math.floor(Math.random() * 3);
-            let plat = this.groups.solids.create(Math.random()*400, i*75,
-                'atlas', 'platform-' + plats[x]);
-            plat.scale.setTo(2);
-            plat.body.immovable = true;
-        }
+        for(let i = -1; i<10; i++)
+            this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
+                Math.random()*400, i*75);
 
         this.groups.hazards = this.add.group();
         this.groups.hazards.enableBody = true;
@@ -47,7 +43,9 @@ define(['game/keyDown', 'util/vectorMath'], function (keyDown, VM) {return {
     },
     update: function () {
 
-		this.groups.solids.forEach(function(platform){platform.body.y += 1;});
+		//this.groups.solids.forEach(function(platform){platform.body.y += 1;});
+		// Using velocity for this to fix player bounce glitch
+
         // Rotate gravity whenever space is held (assumes the player is loaded into the SSC)
         if (keyDown('spacebar')) {
             let g = VM.rotate(this.player.body.gravity, 5);
