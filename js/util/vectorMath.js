@@ -54,7 +54,9 @@ let VM = {
         // Treats the second vector as an axis,
         // and returns the first vector's component along that axis
         // AS A SCALAR.
-        return VM.dot(v, u)*1.0/(VM.magnitude(v)*VM.magnitude(u));
+        let d = VM.dot(v, u)*1.0/(VM.magnitude(v)*VM.magnitude(u));
+        if (isNaN(d)) return 0;
+        return d;
     },
     direction: function (v) {
         // direction: Decides which of the four keyboard directions

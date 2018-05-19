@@ -6,7 +6,7 @@ define(['game/game', 'util/functional'], function (game, F) {
             let retval = [];
             for (let skel of this.skels) if (skel[k]) { // For each skeleton that supports the method:
                 let r = skel[k].apply(this, args); // Call it
-                if (r) retval[retval.length] = r; // Add it to return value if it returned anything
+                if (r != undefined) retval[retval.length] = r; // Add it to return value if it returned anything
             }
             switch (retval.length) {
                 case 0: return undefined; // Return nothing if nothing returned anything
@@ -26,7 +26,7 @@ define(['game/game', 'util/functional'], function (game, F) {
             // Put them all on the compositor.
             for (let k in skelMeths) if (!this[k])
                 this[k] = function () {
-                    self.eachSkel(k, arguments);
+                    return self.eachSkel(k, arguments);
                 };
         },
         init: function () {
