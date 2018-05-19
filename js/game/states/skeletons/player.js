@@ -4,9 +4,9 @@
     Controls depend on direction of gravity.
     If there's no gravity, can move freely in any direction. */
 let DEBUG = false;
-define(['game/keyDown', 'game/states/fadeOut', 'util/functional',
+define(['game/game', 'game/keyDown', 'game/states/fadeOut', 'util/functional',
     'util/vectorMath'],
-function (keyDown, fadeOut, F, VM) {return {
+function (game, keyDown, fadeOut, F, VM) {return {
     create: function () {
         this.player = this.add.sprite(100, 0, 'atlas'); // move it during state creation, top left corner not ideal
         this.player.scale.setTo(1.5, 1.5); // change this depending on size of real assets
@@ -45,6 +45,12 @@ function (keyDown, fadeOut, F, VM) {return {
                 let whichNoise = Math.floor(Math.random()*26) + 1;
                 this.game.audiosprite.play('step-' + whichNoise);
             }
+        }
+    },
+    playerCheckGoal: function () {
+        if (this.player.y < 50 && this.player.animations.name == 'jump') {
+            // This is a temporary win condition for levels and will be changed later.
+            game.levelOrder.nextLevel();
         }
     },
     playerCollideSolids: function () {
@@ -187,6 +193,7 @@ function (keyDown, fadeOut, F, VM) {return {
         if (!tryingToWalk) this.playerDoStandStillFromWalk();
         this.playerDoApplyFriction();
         this.playerDoCheckRun();
+        this.playerCheckGoal();
     },
     playerDoTopDownPhysics: function () {
         this.player.angle = 0; // In the absence of gravity, we should always be on our feet
