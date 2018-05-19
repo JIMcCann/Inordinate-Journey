@@ -14,7 +14,7 @@ function (keyDown, fadeOut, F, VM) {return {
         this.player.animations.add('idle', ['guy-walk-1']);
         this.player.animations.add('walk', [
             'guy-walk-1', 'guy-walk-2', 'guy-walk-3',
-            'guy-walk-4', 'guy-walk-5', 'guy-walk-6'], 10, true);
+            'guy-walk-4', 'guy-walk-5', 'guy-walk-6'], 20, true);
         this.player.animations.add('jump', ['guy-jump-4', 'guy-jump-5', 'guy-jump-6', 'guy-jump-7', 'guy-jump-8'], 10);
         this.player.animations.add('fall', ['guy-jump-9'], 10);
         this.player.animations.add('run', ['guy-run-1', 'guy-run-2', 'guy-run-3', 'guy-run-4',
@@ -22,16 +22,14 @@ function (keyDown, fadeOut, F, VM) {return {
         this.player.anchor.setTo(0.5, 0.5); // for rotation
         this.player.animations.play('fall');
         this.game.physics.arcade.enable(this.player); // we want physics for the character
-        /*
         this.player.body.bounce.x = -0.25;
         this.player.body.bounce.y = -0.25; // this may vary
-        */
         this.player.body.gravity.y = 600; // this may also vary
         this.camera.follow(this.player); // camera should follow player
         this.playerStepTimer = 30; // 30 frames until next step noise
-        this.playerWalkStrength = 40;
+        this.playerWalkStrength = 30;
         this.playerJumpStrength = 220;
-        this.playerMinRunSpeed = 250;
+        this.playerMinRunSpeed = 210;
         this.playerFriction = 0.11;
         this.reldirs = {}; // Recalculate once per update loop
         this.relspeeds = {};
