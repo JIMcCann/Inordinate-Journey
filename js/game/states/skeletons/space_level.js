@@ -10,7 +10,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         plat.scale.setTo(2);
         plat.body.immovable = true;
         plat.body.velocity.y = -75;
-        plat.body.checkCollision.top = false;
+        plat.body.checkCollision.up = false;
         plat.body.checkCollision.left = false;
         plat.body.checkCollision.right = false;
         return plat;
