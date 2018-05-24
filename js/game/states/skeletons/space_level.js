@@ -58,6 +58,12 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
 		
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
+        this.background = this.groups.solids.create(0,0,'atlas','moon');
+        this.background.anchor.setTo(0,1);
+        this.background.body.immovable=true;
+        this.background.width = this.game.width;
+        this.background.height = -1*(this.game.height/5);
+        this.game.physics.arcade.enable(this.background);
         this.world.sendToBack(this.groups.solids);
         this.world.sendToBack(this.triangularDude);
         for(let i = -1; i<10; i++)
@@ -78,6 +84,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
 		//this.groups.solids.forEach(function(platform){platform.body.y += 1;});
 		// Using velocity for this to fix player bounce glitch
 
+        this.background.y-=1/4;
         // Rotate gravity whenever space is held (assumes the player is loaded into the SSC)
         if (keyDown('spacebar')) {
             
