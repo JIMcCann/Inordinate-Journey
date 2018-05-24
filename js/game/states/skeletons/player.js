@@ -3,7 +3,7 @@
     Standard player character for regular ol' platforming.
     Controls depend on direction of gravity.
     If there's no gravity, can move freely in any direction. */
-let DEBUG = true;
+let DEBUG = false;
 define(['game/game', 'game/keyDown', 'game/states/fadeOut', 'util/functional',
     'util/vectorMath'],
 function (game, keyDown, fadeOut, F, VM) {return {

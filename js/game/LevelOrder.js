@@ -7,7 +7,7 @@ function (fadeOut, groupsSkel, playerSkel) {return {
     current: -1,
     nextLevel: function () {
         this.current += 1;
-        if (this.current > this.order.length)
+        if (this.current >= this.order.length)
             this.current = 0;
         fadeOut('skelcomp', groupsSkel, playerSkel, this.order[this.current]);
     }
