@@ -3,7 +3,7 @@
     Standard player character for regular ol' platforming.
     Controls depend on direction of gravity.
     If there's no gravity, can move freely in any direction. */
-let DEBUG = false;
+let DEBUG = true;
 define(['game/game', 'game/keyDown', 'game/states/fadeOut', 'util/functional',
     'util/vectorMath'],
 function (game, keyDown, fadeOut, F, VM) {return {
@@ -35,6 +35,11 @@ function (game, keyDown, fadeOut, F, VM) {return {
         this.relspeeds = {};
         // Fix problem with rapidly switching animations
         this.timeSinceOnGround = 1;
+    },
+    playerUpdateBodySize: function () {
+        this.player.body.setSize(16, 16,
+            this.player.width/(2*this.player.scale.x) - 8,
+            this.player.height/(2*this.player.scale.y) - 8);
     },
     playerPlayStepSounds: function () {
         // Play step noises
@@ -219,6 +224,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
         }
     },
     update: function () {
+        this.playerUpdateBodySize();
         this.playerRecalculateReldirs();
         if (DEBUG) console.log(VM.magnitude(this.player.body.velocity));
         this.playerCollideSolids();
@@ -226,6 +232,9 @@ function (game, keyDown, fadeOut, F, VM) {return {
         if (VM.magnitude(this.player.body.gravity) < 0.01)
             this.playerDoTopDownPhysics();
         else this.playerDoPlatformerPhysics();
+    },
+    render: function () {
+        if (DEBUG) this.game.debug.body(this.player);
     }
 };});
 

@@ -11,8 +11,8 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         plat.body.immovable = true;
         plat.body.velocity.y = 60;
         plat.body.checkCollision.down = false;
-        plat.body.checkCollision.left = false;
-        plat.body.checkCollision.right = false;
+//        plat.body.checkCollision.left = false;
+//        plat.body.checkCollision.right = false;
         return plat;
     },
     create: function () {
@@ -29,11 +29,12 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.player.body.collideWorldBounds=true;
         this.game.audiosprite.play('spacelava');
 
-        this.triangularDude = this.add.image(370, 290, 'atlas', 'triangle-boss');
-        this.triangularDude.anchor.setTo(0.4, 1);
         this.triangleFlipTimeout = 30;
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
+        this.triangularDude = this.groups.solids.create(370, 290, 'atlas', 'triangle-boss');
+        this.triangularDude.body.immovable = true;
+        this.triangularDude.anchor.setTo(0.4, 1);
         this.world.sendToBack(this.groups.solids);
         this.world.sendToBack(this.triangularDude);
         for(let i = -1; i<10; i++)
