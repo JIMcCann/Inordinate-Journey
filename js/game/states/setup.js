@@ -4,12 +4,13 @@
     Bryan, you don't have to worry about making the audiosprite.
     I found a program that will handle it if you just upload the audio files.
     The reason I want us to use an audiosprite is for coding convenience. */
-define(['game/assetPath', 'game/game', 'util/functional'], function (assetPath, game, F) {
+define(['game/assetPath', 'game/game', 'game/LevelOrder', 'util/functional'], function (assetPath, game, LevelOrder, F) {
     game.state.add('setup', {
         init: function () {
             let args = F.arrayOf.apply(F, arguments);
             this.nextState = args[0]; // the starting state of the game should be the first argument
             this.otherArgs = args.slice(1); // other arguments will be forwarded to said state
+            game.levelOrder = LevelOrder; // avoids circular dependency
         },
         preload: function () {
             Phaser.Canvas.setSmoothingEnabled(game.context, false); // no smooth scaling thanks
