@@ -63,7 +63,11 @@ function (game, keyDown, fadeOut, F, VM) {return {
         if (this.groups.solids) {
             this.game.physics.arcade.collide(this.player, this.groups.solids); // then treat them as solid
             this.game.physics.arcade.overlap(this.player, this.groups.solids, function (player, solid) {
-                let V = VM.subtract(player, VM.scale(VM.normalize(player.body.gravity), 16));
+                let centerOf = function (obj) {
+                    return VM.vector(obj.x + obj.width/2, obj.y + obj.height/2);
+                }
+                let centerDiff = VM.subtract(centerOf(solid.body), centerOf(player.body));
+                let V = VM.subtract(player, VM.scale(VM.normalize(centerDiff), 16));
                 player.x = V.x;
                 player.y = V.y;
             });
@@ -102,7 +106,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
                      this.relspeeds.up < 0.2;
         if (m) this.timeSinceOnGround = 0;
         else this.timeSinceOnGround++;
-        return this.timeSinceOnGround < 5 && this.player.animations.name != 'jump';
+        return this.timeSinceOnGround < 20 && this.player.animations.name != 'jump';
     },
     playerDoJump: function () {
         this.player.body.velocity.x += this.reldirs.up.x*this.playerJumpStrength;
