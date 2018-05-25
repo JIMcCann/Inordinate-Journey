@@ -25,6 +25,8 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
 	
 	},
     create: function () {
+        this.player.x = this.game.width/2;
+        this.player.y = this.game.height/3;
 		this.game.stage.backgroundColor = '#034b59';
 		
 		this.timer = this.game.time.create(false);

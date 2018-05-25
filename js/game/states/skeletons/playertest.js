@@ -11,11 +11,13 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         plat.body.immovable = true;
         plat.body.velocity.y = 60;
         plat.body.checkCollision.down = false;
-//        plat.body.checkCollision.left = false;
-//        plat.body.checkCollision.right = false;
+        plat.body.checkCollision.left = false;
+        plat.body.checkCollision.right = false;
         return plat;
     },
     create: function () {
+        this.player.x = this.game.width/2;
+        this.player.y = 2*this.game.height/3;
 		this.timer = this.game.time.create(false);
 		this.timer.loop(1300, function () {
 		    this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
@@ -32,8 +34,8 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.triangleFlipTimeout = 30;
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
-        this.triangularDude = this.groups.solids.create(370, 290, 'atlas', 'triangle-boss');
-        this.triangularDude.body.immovable = true;
+        this.triangularDude = this/*.groups.solids.create*/.add.image(370, 290, 'atlas', 'triangle-boss');
+//        this.triangularDude.body.immovable = true;
         this.triangularDude.anchor.setTo(0.4, 1);
         this.world.sendToBack(this.groups.solids);
         this.world.sendToBack(this.triangularDude);
