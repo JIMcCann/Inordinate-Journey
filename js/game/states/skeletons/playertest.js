@@ -39,10 +39,13 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.triangularDude.anchor.setTo(0.4, 1);
         this.world.sendToBack(this.groups.solids);
         this.world.sendToBack(this.triangularDude);
+        let exampleplat = null;
         for(let i = -1; i<10; i++)
-            this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
+            exampleplat = this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
-
+        let startplatform = this.spawnPlatform('platform-1',
+            this.player.x - exampleplat.width/2,
+            this.player.y + this.player.height/2);
         this.groups.hazards = this.add.group();
         this.groups.hazards.enableBody = true;
         let lava = this.groups.hazards.create(0, 550, 'atlas', 'lava');
