@@ -3,7 +3,7 @@
     Standard player character for regular ol' platforming.
     Controls depend on direction of gravity.
     If there's no gravity, can move freely in any direction. */
-let DEBUG = true;
+let DEBUG = false;
 define(['game/game', 'game/keyDown', 'game/states/fadeOut', 'util/functional',
     'util/vectorMath'],
 function (game, keyDown, fadeOut, F, VM) {return {
@@ -60,8 +60,14 @@ function (game, keyDown, fadeOut, F, VM) {return {
     },
     playerCollideSolids: function () {
         // If any sprites / etc declare themselves solid by being in the 'solids' group:
-        if (this.groups.solids)
+        if (this.groups.solids) {
             this.game.physics.arcade.collide(this.player, this.groups.solids); // then treat them as solid
+            this.game.physics.arcade.overlap(this.player, this.groups.solids, function (player, solid) {
+                let V = VM.subtract(player, VM.scale(VM.normalize(player.body.gravity), 16));
+                player.x = V.x;
+                player.y = V.y;
+            });
+        }
     },
     playerCollideHazards: function () {
         // If any sprites / etc declare themselves dangerous by being in the 'hazards' group:
