@@ -7,6 +7,7 @@ function (keyDown, portal, F, VM) {return {
         planet.body.setCircle(planet.width/(2*planet.scale.x));
         planet.body.immovable = true;
         planet.body.velocity.y = (1 + Math.random())*100;
+        planet.body.velocity.x = (2*Math.random() - 1)*50;
         planet.body.angularVelocity = (Math.random()*2 - 1)*50;
         return planet;
     },
@@ -77,7 +78,7 @@ function (keyDown, portal, F, VM) {return {
         if (this.portalTimeout <= 0 && !this.portal) {
             this.addSkel(portal);
             this.portal.x = Math.random()*this.game.width;
-            this.portal.y = 0;
+            this.portal.y = -50;
             this.portal.body.velocity.y = 36;
         }
     }
