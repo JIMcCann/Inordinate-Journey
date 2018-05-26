@@ -100,6 +100,8 @@ function (keyDown, portal, F, VM) {return {
             console.log(this.portal.x, this.portal.y);
             this.portal.body.velocity.y = 12;
         }// else if (this.portal) console.log(this.portal.x, this.portal.y);
+
+        if (this.player.y > this.lava.y) this.playerDie(); // workaround for inexplicable harmless lava
     },
   //  render: function () {
 //        this.game.debug.body(this.lava);
