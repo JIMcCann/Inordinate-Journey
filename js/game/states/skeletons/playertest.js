@@ -38,11 +38,11 @@ function (keyDown, portal, F, VM) {return {
         this.groups.hazards.enableBody = true;
 
 		// Create Lava
-        let lava = this.groups.hazards.create(0, 550, 'atlas', 'lava-1');
-        lava.width = 800;
-        lava.height = 50;
-        lava.animations.add('idle', ['lava-1', 'lava-2', 'lava-3', 'lava-4', 'lava-5'], 10, true);
-        lava.animations.play('idle');
+        this.lava = this.groups.hazards.create(0, 550, 'atlas', 'lava-1');
+        this.lava.width = 800;
+        this.lava.height = 50;
+        this.lava.animations.add('idle', ['lava-1', 'lava-2', 'lava-3', 'lava-4', 'lava-5'], 10, true);
+        this.lava.animations.play('idle');
 
 		// Setting a timer that will randomly generate platforms
 		// starting from the top of the screen using 'spawnPlatform'
@@ -63,21 +63,12 @@ function (keyDown, portal, F, VM) {return {
                 Math.random()*400, i*75);
 
         this.lavarock = this.game.add.tileSprite(0,0,500,600,'atlas', 'volcano-wall');
-        let startplatform = this.spawnPlatform('platform-1',
-            this.player.x - exampleplat.width/2,
-            this.player.y + this.player.height/2);
-        this.lavarock = this.game.add.tileSprite(0,0,500,600,'background');
         this.world.sendToBack(this.lavarock);
         let startplatform = this.spawnPlatform('platform-1',
             this.player.x - exampleplat.width/2,
             this.player.y + this.player.height/2);
         this.groups.hazards = this.add.group();
         this.groups.hazards.enableBody = true;
-        let lava = this.groups.hazards.create(0, 550, 'atlas', 'lava-1');
-        lava.width = 800;
-        lava.height = 50;
-        lava.animations.add('idle', ['lava-1', 'lava-2', 'lava-3', 'lava-4', 'lava-5'], 10, true);
-        lava.animations.play('idle');
         this.portalTimeout = 4000;
     },
     update: function () {
@@ -107,6 +98,9 @@ function (keyDown, portal, F, VM) {return {
             this.portal.y = 0;
             console.log(this.portal.x, this.portal.y);
             this.portal.body.velocity.y = 12;
-        } else if (this.portal) console.log(this.portal.x, this.portal.y);
-    }
+        }// else if (this.portal) console.log(this.portal.x, this.portal.y);
+    },
+  //  render: function () {
+//        this.game.debug.body(this.lava);
+    //}
 };});
