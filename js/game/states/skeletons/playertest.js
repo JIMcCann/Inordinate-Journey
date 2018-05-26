@@ -4,6 +4,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
     preload: function () {
 		// Hi!
 		// wEELLLLl heLLO theR
+        this.game.load.image('background', 'assets/graphics/background1.png');
     },
     spawnPlatform: function (name, x, y) {
         let plat = this.groups.solids.create(x, y, 'atlas', name);
@@ -11,11 +12,12 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         plat.body.immovable = true;
         plat.body.velocity.y = 60;
         plat.body.checkCollision.down = false;
-//        plat.body.checkCollision.left = false;
-//        plat.body.checkCollision.right = false;
+        plat.body.checkCollision.left = false;
+        plat.body.checkCollision.right = false;
         return plat;
     },
     create: function () {
+
 		this.timer = this.game.time.create(false);
 		this.timer.loop(1300, function () {
 		    this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
@@ -40,6 +42,9 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         for(let i = -1; i<10; i++)
             this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
+        
+        this.lavarock = this.game.add.tileSprite(0,0,500,600,'background');
+        this.world.sendToBack(this.lavarock);
 
         this.groups.hazards = this.add.group();
         this.groups.hazards.enableBody = true;
@@ -51,6 +56,8 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
 
 		//this.groups.solids.forEach(function(platform){platform.body.y += 1;});
 		// Using velocity for this to fix player bounce glitch
+
+        this.lavarock.tilePosition.y -= 2;
 
         // Rotate gravity whenever space is held (assumes the player is loaded into the SSC)
         if (keyDown('spacebar')) {
