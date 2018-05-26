@@ -103,9 +103,9 @@ function (keyDown, portal, F, VM) {return {
 		this.portalTimeout--;
 		if (this.portalTimeout <= 0 && this.portal == undefined) {
 		    this.addSkel(portal);
-		    portal.x = Math.random()*this.game.width;
-		    portal.y = this.game.height;
-		    portal.body.velocity.y = -12;
+		    this.portal.x = Math.random()*this.game.width;
+		    this.portal.y = this.game.height;
+		    this.portal.body.velocity.y = -12;
 		}
     }
 };});
