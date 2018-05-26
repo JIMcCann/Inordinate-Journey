@@ -4,6 +4,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
     preload: function () {
 		// Hi!
 		// wEELLLLl heLLO theR
+        this.game.load.image('background', 'assets/graphics/background1.png');
     },
     spawnPlatform: function (name, x, y) {
         let plat = this.groups.solids.create(x, y, 'atlas', name);
@@ -43,6 +44,8 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         for(let i = -1; i<10; i++)
             exampleplat = this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
+        this.lavarock = this.game.add.tileSprite(0,0,500,600,'background');
+        this.world.sendToBack(this.lavarock);
         let startplatform = this.spawnPlatform('platform-1',
             this.player.x - exampleplat.width/2,
             this.player.y + this.player.height/2);
@@ -58,6 +61,8 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
 
 		//this.groups.solids.forEach(function(platform){platform.body.y += 1;});
 		// Using velocity for this to fix player bounce glitch
+
+        this.lavarock.tilePosition.y -= 2;
 
         // Rotate gravity whenever space is held (assumes the player is loaded into the SSC)
         if (keyDown('spacebar')) {
