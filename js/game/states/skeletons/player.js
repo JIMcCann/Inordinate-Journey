@@ -3,7 +3,7 @@
     Standard player character for regular ol' platforming.
     Controls depend on direction of gravity.
     If there's no gravity, can move freely in any direction. */
-let DEBUG = true;
+let DEBUG = false;
 define(['game/game', 'game/keyDown', 'game/states/fadeOut', 'util/functional',
     'util/vectorMath'],
 function (game, keyDown, fadeOut, F, VM) {return {
@@ -53,15 +53,25 @@ function (game, keyDown, fadeOut, F, VM) {return {
         }
     },
     playerCheckGoal: function () {
-        if (this.player.y < 50 && this.player.animations.name == 'jump') {
+//        if (this.player.y < 50 && this.player.animations.name == 'jump') {
             // This is a temporary win condition for levels and will be changed later.
-            game.levelOrder.nextLevel();
-        }
+    //        game.levelOrder.nextLevel();
+  //      }
     },
     playerCollideSolids: function () {
         // If any sprites / etc declare themselves solid by being in the 'solids' group:
-        if (this.groups.solids)
+        if (this.groups.solids) {
             this.game.physics.arcade.collide(this.player, this.groups.solids); // then treat them as solid
+            this.game.physics.arcade.overlap(this.player, this.groups.solids, function (player, solid) {
+                let centerOf = function (obj) {
+                    return VM.vector(obj.x + obj.width/2, obj.y + obj.height/2);
+                }
+                let centerDiff = VM.subtract(centerOf(solid.body), centerOf(player.body));
+                let V = VM.subtract(player, VM.scale(VM.normalize(centerDiff), 16));
+                player.x = V.x;
+                player.y = V.y;
+            });
+        }
     },
     playerCollideHazards: function () {
         // If any sprites / etc declare themselves dangerous by being in the 'hazards' group:
@@ -96,7 +106,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
                      this.relspeeds.up < 0.2;
         if (m) this.timeSinceOnGround = 0;
         else this.timeSinceOnGround++;
-        return this.timeSinceOnGround < 5 && this.player.animations.name != 'jump';
+        return this.timeSinceOnGround < 20 && this.player.animations.name != 'jump';
     },
     playerDoJump: function () {
         this.player.body.velocity.x += this.reldirs.up.x*this.playerJumpStrength;

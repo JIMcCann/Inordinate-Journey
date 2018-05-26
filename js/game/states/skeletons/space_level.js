@@ -25,11 +25,9 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
 	
 	},
     create: function () {
+        this.player.x = this.game.width/2;
+        this.player.y = this.game.height/3;
 		this.game.stage.backgroundColor = '#034b59';
-		let background = this.game.add.image(0,0,'atlas','moon');
-		background.anchor.setTo(0,1);
-		background.width = this.game.width;
-		background.height = -1*(this.game.height/5);
 		
 		this.timer = this.game.time.create(false);
 		this.timer.loop(1300, function () {
@@ -63,7 +61,6 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.background.body.immovable=true;
         this.background.width = this.game.width;
         this.background.height = -1*(this.game.height/5);
-        this.game.physics.arcade.enable(this.background);
         this.world.sendToBack(this.groups.solids);
         this.world.sendToBack(this.triangularDude);
         for(let i = -1; i<10; i++)

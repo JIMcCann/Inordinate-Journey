@@ -4,7 +4,8 @@ define(['game/game', 'util/functional'], function (game, F) {
     let statedef = {
         eachSkel: function (k, args) {
             let retval = [];
-            for (let skel of this.skels) if (skel[k]) { // For each skeleton that supports the method:
+            for (let skel of this.skels) if (skel[k] && !skel.SKC_DONE_FUNCS[k]) {
+                // For each skeleton that supports the method:
                 let r = skel[k].apply(this, args); // Call it
                 if (r != undefined) retval[retval.length] = r; // Add it to return value if it returned anything
             }
@@ -43,6 +44,7 @@ define(['game/game', 'util/functional'], function (game, F) {
                 }
 
                 // once we've figured out what the skeleton is,
+                skel.SKC_DONE_FUNCS = {};
                 this.skels[this.skels.length] = skel; // add it to what skeletons we have
                 skelinitps[skelinitps.length] = thisskelinitps; // and add the init parameters
             }
@@ -55,8 +57,12 @@ define(['game/game', 'util/functional'], function (game, F) {
                 if (this.skels[i].init)
                     this.skels[i].init.apply(this, skelinitps[i]);
         },
-        preload: function () {this.eachSkel('preload');},
-        create: function () {this.eachSkel('create');},
+        preload: function () {
+            this.eachSkel('preload');
+        },
+        create: function () {
+            this.eachSkel('create');
+        },
         update: function () {this.eachSkel('update');},
         render: function () {this.eachSkel('render');},
         // addSkel()
@@ -68,12 +74,22 @@ define(['game/game', 'util/functional'], function (game, F) {
         // The first argument should be the skeleton itself.
         // Any additional arguments are treated as init parameters for the skeleton.
         addSkel: function (skel) {
+            skel.SKC_DONE_FUNCS = {};
             let skelinitps = F.arrayOf.apply(F, arguments).slice(1);
             this.skels[this.skels.length] = skel;
             this.updateMethods();
-            if (skel.init) skel.init.apply(this, skelinitps);
-            if (skel.preload) skel.preload.call(this);
-            if (skel.create) skel.create.call(this);
+            if (skel.init) {
+                skel.init.apply(this, skelinitps);
+                skel.SKC_DONE_FUNCS.init = true;
+            }
+            if (skel.preload) {
+                skel.preload.call(this);
+                skel.SKC_DONE_FUNCS.preload = true;
+            }
+            if (skel.create) {
+                skel.create.call(this);
+                skel.SKC_DONE_FUNCS.create = true;
+            }
         }
     };
     // add the SSC to the game

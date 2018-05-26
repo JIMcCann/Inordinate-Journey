@@ -17,7 +17,8 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         return plat;
     },
     create: function () {
-
+        this.player.x = this.game.width/2;
+        this.player.y = 2*this.game.height/3;
 		this.timer = this.game.time.create(false);
 		this.timer.loop(1300, function () {
 		    this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
@@ -34,23 +35,27 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.triangleFlipTimeout = 30;
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
-        this.triangularDude = this.groups.solids.create(370, 290, 'atlas', 'triangle-boss');
-        this.triangularDude.body.immovable = true;
+        this.triangularDude = this/*.groups.solids.create*/.add.image(370, 290, 'atlas', 'triangle-boss');
+//        this.triangularDude.body.immovable = true;
         this.triangularDude.anchor.setTo(0.4, 1);
         this.world.sendToBack(this.groups.solids);
         this.world.sendToBack(this.triangularDude);
+        let exampleplat = null;
         for(let i = -1; i<10; i++)
-            this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
+            exampleplat = this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
-        
         this.lavarock = this.game.add.tileSprite(0,0,500,600,'background');
         this.world.sendToBack(this.lavarock);
-
+        let startplatform = this.spawnPlatform('platform-1',
+            this.player.x - exampleplat.width/2,
+            this.player.y + this.player.height/2);
         this.groups.hazards = this.add.group();
         this.groups.hazards.enableBody = true;
-        let lava = this.groups.hazards.create(0, 550, 'atlas', 'lava');
+        let lava = this.groups.hazards.create(0, 550, 'atlas', 'lava-1');
         lava.width = 800;
         lava.height = 50;
+        lava.animations.add('idle', ['lava-1', 'lava-2', 'lava-3', 'lava-4', 'lava-5'], 10, true);
+        lava.animations.play('idle');
     },
     update: function () {
 
