@@ -7,26 +7,47 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         // Hi!
         // wEELLLLl heLLO theR
     },
-    spawnPlatform: function (name, x, y) {
-        let plat = this.groups.solids.create(x, y, 'atlas', name);
+    spawnSaw: function (name) {
+        let plat = this.groups.hazards.create(390, 0, 'atlas', name);
+        let pos = Math.ceil(Math.random()*2);
+        if (pos == 1){
+            plat.x=115;
+        }
         plat.anchor.setTo(0.5);
-        plat.scale.setTo(6);
+        plat.body.velocity.y=100;
         plat.body.immovable = true;
         plat.angle=90;
         plat.body.setSize(plat.height/plat.scale.y,plat.width/plat.scale.x);
         //plat.body.checkCollision.top = false;
-        //plat.body.checkCollision.left = false;
-        //plat.body.checkCollision.right = false;
+        plat.body.checkCollision.left = true;
+        plat.body.checkCollision.right = true;
+        return plat;
+    },
+    spawnStatic: function (name) {
+        let plat = this.groups.hazards.create(390, 0, 'atlas', name);
+        let pos = Math.ceil(Math.random()*2);
+        if (pos == 1){
+            plat.x=115;
+        }
+        plat.anchor.setTo(0.5);
+        plat.body.velocity.y=100;
+        plat.body.immovable = true;
+        plat.angle=90;
+        plat.body.setSize(plat.height/plat.scale.y,plat.width/plat.scale.x);
+        //plat.body.checkCollision.top = false;
+        plat.body.checkCollision.left = true;
+        plat.body.checkCollision.right = true;
         return plat;
     },
     create: function () {
         
-        //this.timer = this.game.time.create(false);
-        //this.timer.loop(1300, function () {
-        //    this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
-        //        Math.random()*400, this.game.height+100);
-        //}, this);
-        //this.timer.start();
+        this.groups.hazards = this.add.group();
+        this.groups.hazards.enableBody = true;
+        this.timer = this.game.time.create(false);
+        this.timer.loop(4000, function () {
+            this.spawnStatic('platform-1');
+        }, this);
+        this.timer.start();
         
         // Use arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -35,7 +56,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         
         this.player.x = this.game.width/2; // Start the player at the bottom of the screen
         this.player.y= this.game.height*0.75;
-        this.playerJumpStrength=330;
+        this.playerJumpStrength=350;
         let g = VM.rotate(this.player.body.gravity, 90);
         this.player.body.gravity.x = g.x;
         this.player.body.gravity.y = g.y;
@@ -54,25 +75,12 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.world.sendToBack(this.groups.solids);
         this.world.sendToBack(this.triangularDude);
 
-        let B1=this.groups.solids.create(-50,0, 'background1');
+        let B1=this.groups.solids.create(0,0, 'background1');
         this.game.physics.arcade.enable(B1);
         B1.body.immovable=true;
         let B2=this.groups.solids.create(400,0, 'background2');
         this.game.physics.arcade.enable(B2);
         B2.body.immovable=true
-
-        //this.add.image(-50,0, 'background');
-        //let p = this.spawnPlatform('platform-1',0, 0);
-        
-
-        this.groups.hazards = this.add.group();
-        this.groups.hazards.enableBody = true;
-        
-        // Lava is offscreen at the top just to kill the player.
-        // Should fix.
-        let lava = this.groups.hazards.create(0, 0-50, 'atlas', 'lava');
-        lava.width = 800;
-        lava.height = 50;
     },
     update: function () {
 
@@ -100,5 +108,6 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
             this.player.body.gravity.x = g.x;
             this.player.body.gravity.y = g.y;
         }
+
     }
 };});
