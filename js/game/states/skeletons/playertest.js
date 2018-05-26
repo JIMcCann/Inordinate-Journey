@@ -48,9 +48,11 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
             this.player.y + this.player.height/2);
         this.groups.hazards = this.add.group();
         this.groups.hazards.enableBody = true;
-        let lava = this.groups.hazards.create(0, 550, 'atlas', 'lava');
+        let lava = this.groups.hazards.create(0, 550, 'atlas', 'lava-1');
         lava.width = 800;
         lava.height = 50;
+        lava.animations.add('idle', ['lava-1', 'lava-2', 'lava-3', 'lava-4', 'lava-5'], 10, true);
+        lava.animations.play('idle');
     },
     update: function () {
 
