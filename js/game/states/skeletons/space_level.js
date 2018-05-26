@@ -78,8 +78,7 @@ function (keyDown, portal, F, VM) {return {
         lava.height = 50;
 
         this.portalTimeout = 1500;
-        this.player.x = Math.random()*this.game.width;
-        this.player.y = this.background.height + 32;
+        this.player.y -= 300;
     },
     update: function () {
 
