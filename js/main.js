@@ -1,7 +1,7 @@
 /*  main
     Not very useful yet.
     Current condition: just loads a silly little test room. */
-requirejs.config({baseUrl: '/js'}); // Assume all module paths are relative to /js.
+requirejs.config({baseUrl: './js'}); // Assume all module paths are relative to /js.
 requirejs(['game/states/functionCaller',
             'game/states/setup',
             'game/states/fixed/titleScreen',
