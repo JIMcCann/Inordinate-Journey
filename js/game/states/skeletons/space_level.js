@@ -1,7 +1,7 @@
 /*  game/states/skeletons/playertest
     A dumb test map with smiley geometry shapes */
 define(['game/keyDown', 'game/states/skeletons/portal', 'util/functional', 'util/vectorMath'],
-function (keyDown, F, VM) {return {
+function (keyDown, portal, F, VM) {return {
     preload: function () {
 		// Hi!
 		// wEELLLLl heLLO theR
