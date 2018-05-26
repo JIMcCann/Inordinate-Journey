@@ -73,6 +73,10 @@ function (game, keyDown, fadeOut, F, VM) {return {
             });
         }
     },
+    playerDie: function () {
+        this.game.audiosprite.stop();
+        F.curry(fadeOut, this.state.current).apply(null, this.initargs);
+    },
     playerCollideHazards: function () {
         // If any sprites / etc declare themselves dangerous by being in the 'hazards' group:
         let STATE = this;
@@ -143,7 +147,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
     },
     playerRespondJump: function () {
         if (keyDown(VM.direction(this.reldirs.up)) // If we're trying to jump
-                && this.playerOnGround()) { // from standing or walking:
+                && this.playerStanding()) { // from standing or walking:
             this.playerDoJump(); // then we can
             return true;
         }
@@ -176,11 +180,15 @@ function (game, keyDown, fadeOut, F, VM) {return {
         else if (hardness > 150) this.game.audiosprite.play('land');
         // avoid thok-thok-thok glitch by not making a sound at all if we landed really lightly
     },
+    playerDoForceLanding: function () {
+        this.player.animations.play('walk');
+        this.playerPlayLandingSound();
+    },
     playerDoLandFromFall: function () {
         if (['fall', 'jump'].includes(this.player.animations.name) // If we're falling
                 && this.playerOnGround()) { // but just landed
-            this.player.animations.play('walk'); // then we're walking (and possibly about to stand still)
-            this.playerPlayLandingSound();
+            // then land
+            this.playerDoForceLanding();
         }
     },
     playerDoStandStillFromWalk: function () {
