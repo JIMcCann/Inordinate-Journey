@@ -53,10 +53,10 @@ function (game, keyDown, fadeOut, F, VM) {return {
         }
     },
     playerCheckGoal: function () {
-        if (this.player.y < 50 && this.player.animations.name == 'jump') {
+//        if (this.player.y < 50 && this.player.animations.name == 'jump') {
             // This is a temporary win condition for levels and will be changed later.
-            game.levelOrder.nextLevel();
-        }
+    //        game.levelOrder.nextLevel();
+  //      }
     },
     playerCollideSolids: function () {
         // If any sprites / etc declare themselves solid by being in the 'solids' group:
