@@ -69,7 +69,7 @@ function (keyDown, portal, F, VM) {return {
             this.player.y + this.player.height/2);
         this.groups.hazards = this.add.group();
         this.groups.hazards.enableBody = true;
-        this.portalTimeout = 4000;
+        this.portalTimeout = 1000;
     },
     update: function () {
 
