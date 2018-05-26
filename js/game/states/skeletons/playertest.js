@@ -1,10 +1,10 @@
 /*  game/states/skeletons/playertest
     A dumb test map with smiley geometry shapes */
-define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown, F, VM) {return {
+define(['game/keyDown', 'game/states/skeletons/portal', 'util/functional', 'util/vectorMath'],
+function (keyDown, portal, F, VM) {return {
     preload: function () {
 		// Hi!
 		// wEELLLLl heLLO theR
-        this.game.load.image('background', 'assets/graphics/background1.png');
     },
     spawnPlatform: function (name, x, y) {
         let plat = this.groups.solids.create(x, y, 'atlas', name);
@@ -17,6 +17,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         return plat;
     },
     create: function () {
+        this.portal = undefined;
         this.player.x = this.game.width/2;
         this.player.y = 2*this.game.height/3;
 		this.timer = this.game.time.create(false);
@@ -44,7 +45,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         for(let i = -1; i<10; i++)
             exampleplat = this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
-        this.lavarock = this.game.add.tileSprite(0,0,500,600,'background');
+        this.lavarock = this.game.add.tileSprite(0,0,500,600,'atlas', 'volcano-wall');
         this.world.sendToBack(this.lavarock);
         let startplatform = this.spawnPlatform('platform-1',
             this.player.x - exampleplat.width/2,
@@ -56,6 +57,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         lava.height = 50;
         lava.animations.add('idle', ['lava-1', 'lava-2', 'lava-3', 'lava-4', 'lava-5'], 10, true);
         lava.animations.play('idle');
+        this.portalTimeout = 4000;
     },
     update: function () {
 
@@ -76,5 +78,14 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
             this.triangleFlipTimeout = 30;
             this.triangularDude.scale.x *= -1;
         }
+
+        this.portalTimeout--;
+        if (this.portalTimeout <= 0 && !this.portal) {
+            this.addSkel(portal);
+            this.portal.x = Math.random()*this.game.width;
+            this.portal.y = 0;
+            console.log(this.portal.x, this.portal.y);
+            this.portal.body.velocity.y = 12;
+        } else if (this.portal) console.log(this.portal.x, this.portal.y);
     }
 };});
