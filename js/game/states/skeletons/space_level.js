@@ -1,6 +1,7 @@
 /*  game/states/skeletons/playertest
     A dumb test map with smiley geometry shapes */
-define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown, F, VM) {return {
+define(['game/keyDown', 'game/states/skeletons/portal', 'util/functional', 'util/vectorMath'],
+function (keyDown, F, VM) {return {
     preload: function () {
 		// Hi!
 		// wEELLLLl heLLO theR
@@ -25,6 +26,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
 	
 	},
     create: function () {
+        this.portal = undefined;
         this.player.x = this.game.width/2;
         this.player.y = this.game.height/3;
 		this.game.stage.backgroundColor = '#034b59';
@@ -47,8 +49,9 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.player.body.gravity.y = g.y;
 		
 		// Triangle Dude now moves across the screen, might replace with a diff enemy
-		// TODO: Make hazard
-        this.triangularDude = this.add.sprite(370, 290, 'atlas', 'triangle-boss');
+        this.groups.hazards = this.add.group();
+        this.groups.hazards.enableBody = true;
+        this.triangularDude = this.groups.hazards.create(370, 290, 'atlas', 'triangle-boss');
         this.triangularDude.anchor.setTo(0.4, 1);
         this.triangleFlipTimeout = 30;
 		this.game.physics.enable(this.triangularDude);
@@ -67,14 +70,16 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
             this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
 
-        this.groups.hazards = this.add.group();
-        this.groups.hazards.enableBody = true;
 		
 		// Lava is offscreen at the top just to kill the player.
 		// Should fix.
         let lava = this.groups.hazards.create(0, 0-50, 'atlas', 'lava');
         lava.width = 800;
         lava.height = 50;
+
+        this.portalTimeout = 1500;
+        this.player.x = Math.random()*this.game.width;
+        this.player.y = this.background.height + 32;
     },
     update: function () {
 
@@ -95,5 +100,13 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         }
 		this.entityWrap(this.player); // wrapping on player
 		this.entityWrap(this.triangularDude); // wrapping on triangularDude
+		
+		this.portalTimeout--;
+		if (this.portalTimeout <= 0 && this.portal == undefined) {
+		    this.addSkel(portal);
+		    portal.x = Math.random()*this.game.width;
+		    portal.y = this.game.height;
+		    portal.body.velocity.y = -12;
+		}
     }
 };});
