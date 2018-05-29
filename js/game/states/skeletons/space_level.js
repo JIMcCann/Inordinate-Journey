@@ -1,8 +1,9 @@
 /*  game/states/skeletons/playertest
     A dumb test map with smiley geometry shapes */
 define(['game/keyDown', 'game/states/skeletons/portal', 'game/states/skeletons/spacebg',
+    'game/states/skeletons/triangle',
     'util/functional', 'util/vectorMath'],
-function (keyDown, portal, spacebg, F, VM) {return {
+function (keyDown, portal, spacebg, triangle, F, VM) {return {
     preload: function () {
 		// Hi!
 		// wEELLLLl heLLO theR
@@ -51,13 +52,10 @@ function (keyDown, portal, spacebg, F, VM) {return {
         this.player.body.gravity.y = g.y;
 		
 		// Triangle Dude now moves across the screen, might replace with a diff enemy
-        this.groups.hazards = this.add.group();
-        this.groups.hazards.enableBody = true;
-        this.triangularDude = this.groups.hazards.create(370, 290, 'atlas', 'triangle-boss');
-        this.triangularDude.anchor.setTo(0.4, 1);
-        this.triangleFlipTimeout = 30;
-		this.game.physics.enable(this.triangularDude);
+		this.addSkel(triangle);
+        this.triangularDude.scale.setTo(1, -1);
 		this.triangularDude.body.velocity.x = 100;
+		this.triangularDude.body.angularVelocity = 6;
 		
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
@@ -94,11 +92,7 @@ function (keyDown, portal, spacebg, F, VM) {return {
 			console.log(this.player.x);
         }
         // Gooferino the triangle duderino
-        this.triangleFlipTimeout--;
-        if (this.triangleFlipTimeout == 0) {
-            this.triangleFlipTimeout = 30;
-            this.triangularDude.scale.x *= -1;
-        }
+        this.triangularDude.body.angularVelocity += 0.2;
 		this.entityWrap(this.player); // wrapping on player
 		this.entityWrap(this.triangularDude); // wrapping on triangularDude
 		
