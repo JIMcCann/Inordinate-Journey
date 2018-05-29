@@ -1,5 +1,6 @@
-define(['game/keyDown', 'game/states/skeletons/portal', 'util/functional', 'util/vectorMath'],
-function (keyDown, portal, F, VM) {return {
+define(['game/keyDown', 'game/states/skeletons/portal', 'game/states/skeletons/spacebg',
+    'util/functional', 'util/vectorMath'],
+function (keyDown, portal, spacebg, F, VM) {return {
     spawnPlanet: function () {
         let planet = this.groups.solids.create(Math.random()*this.game.width, -100, 'atlas', 'asteroid');
         planet.anchor.setTo(0.5, 0.5);
@@ -12,6 +13,7 @@ function (keyDown, portal, F, VM) {return {
         return planet;
     },
     create: function () {
+        this.addSkel(spacebg);
         this.portal = undefined;
 
         this.game.stage.backgroundColor = '#666666';

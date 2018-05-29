@@ -1,7 +1,8 @@
 /*  game/states/skeletons/playertest
     A dumb test map with smiley geometry shapes */
-define(['game/keyDown', 'game/states/skeletons/portal', 'util/functional', 'util/vectorMath'],
-function (keyDown, portal, F, VM) {return {
+define(['game/keyDown', 'game/states/skeletons/portal', 'game/states/skeletons/spacebg',
+    'util/functional', 'util/vectorMath'],
+function (keyDown, portal, spacebg, F, VM) {return {
     preload: function () {
 		// Hi!
 		// wEELLLLl heLLO theR
@@ -26,6 +27,7 @@ function (keyDown, portal, F, VM) {return {
 	
 	},
     create: function () {
+        this.addSkel(spacebg);
         this.portal = undefined;
         this.player.x = this.game.width/2;
         this.player.y = this.game.height/3;
@@ -33,7 +35,7 @@ function (keyDown, portal, F, VM) {return {
 		
 		this.timer = this.game.time.create(false);
 		this.timer.loop(1300, function () {
-		    this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
+		    this.spawnPlatform('platform-moon-' + (Math.floor(Math.random()*3) + 1),
 		        Math.random()*400, this.game.height+100);
 		}, this);
 		this.timer.start();
@@ -67,7 +69,7 @@ function (keyDown, portal, F, VM) {return {
         this.world.sendToBack(this.groups.solids);
         this.world.sendToBack(this.triangularDude);
         for(let i = -1; i<10; i++)
-            this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
+            this.spawnPlatform('platform-moon-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
 
 		
