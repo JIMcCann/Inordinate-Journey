@@ -41,6 +41,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
     },
     create: function () {
         this.game.stage.backgroundColor='#4f4d4d';
+        this.game.audiosprite.play('bgm-side-to-side');
         
         this.groups.hazards = this.add.group();
         this.groups.hazards.enableBody = true;
@@ -53,7 +54,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         // Use arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        this.game.audiosprite.play('spacelava');
+//        this.game.audiosprite.play('spacelava');
         
         this.player.x = this.game.width/2; // Start the player at the bottom of the screen
         this.player.y= this.game.height*0.75;

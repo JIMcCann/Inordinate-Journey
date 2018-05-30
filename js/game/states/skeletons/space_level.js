@@ -1,6 +1,9 @@
 /*  game/states/skeletons/playertest
     A dumb test map with smiley geometry shapes */
-define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown, F, VM) {return {
+define(['game/keyDown', 'game/states/skeletons/portal', 'game/states/skeletons/spacebg',
+    'game/states/skeletons/triangle',
+    'util/functional', 'util/vectorMath'],
+function (keyDown, portal, spacebg, triangle, F, VM) {return {
     preload: function () {
 		// Hi!
 		// wEELLLLl heLLO theR
@@ -25,13 +28,16 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
 	
 	},
     create: function () {
+        this.game.audiosprite.play('bgm-moon');
+        this.addSkel(spacebg);
+        this.portal = undefined;
         this.player.x = this.game.width/2;
         this.player.y = this.game.height/3;
 		this.game.stage.backgroundColor = '#034b59';
 		
 		this.timer = this.game.time.create(false);
 		this.timer.loop(1300, function () {
-		    this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
+		    this.spawnPlatform('platform-moon-' + (Math.floor(Math.random()*3) + 1),
 		        Math.random()*400, this.game.height+100);
 		}, this);
 		this.timer.start();
@@ -39,7 +45,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         // Use arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		
-        this.game.audiosprite.play('spacelava');
+//        this.game.audiosprite.play('spacelava');
 		
 		this.player.y = this.game.height; // Start the player at the bottom of the screen
 		let g = VM.rotate(this.player.body.gravity, 180);
@@ -47,12 +53,10 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.player.body.gravity.y = g.y;
 		
 		// Triangle Dude now moves across the screen, might replace with a diff enemy
-		// TODO: Make hazard
-        this.triangularDude = this.add.sprite(370, 290, 'atlas', 'triangle-boss');
-        this.triangularDude.anchor.setTo(0.4, 1);
-        this.triangleFlipTimeout = 30;
-		this.game.physics.enable(this.triangularDude);
+		this.addSkel(triangle);
+        this.triangularDude.scale.setTo(1, -1);
 		this.triangularDude.body.velocity.x = 100;
+		this.triangularDude.body.angularVelocity = 6;
 		
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
@@ -64,17 +68,18 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.world.sendToBack(this.groups.solids);
         this.world.sendToBack(this.triangularDude);
         for(let i = -1; i<10; i++)
-            this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
+            this.spawnPlatform('platform-moon-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
 
-        this.groups.hazards = this.add.group();
-        this.groups.hazards.enableBody = true;
 		
 		// Lava is offscreen at the top just to kill the player.
 		// Should fix.
         let lava = this.groups.hazards.create(0, 0-50, 'atlas', 'lava');
         lava.width = 800;
         lava.height = 50;
+
+        this.portalTimeout = 1500;
+        this.player.y -= 300;
     },
     update: function () {
 
@@ -88,12 +93,16 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
 			console.log(this.player.x);
         }
         // Gooferino the triangle duderino
-        this.triangleFlipTimeout--;
-        if (this.triangleFlipTimeout == 0) {
-            this.triangleFlipTimeout = 30;
-            this.triangularDude.scale.x *= -1;
-        }
+        this.triangularDude.body.angularVelocity += 0.2;
 		this.entityWrap(this.player); // wrapping on player
 		this.entityWrap(this.triangularDude); // wrapping on triangularDude
+		
+		this.portalTimeout--;
+		if (this.portalTimeout <= 0 && this.portal == undefined) {
+		    this.addSkel(portal);
+		    this.portal.x = Math.random()*this.game.width;
+		    this.portal.y = this.game.height;
+		    this.portal.body.velocity.y = -12;
+		}
     }
 };});

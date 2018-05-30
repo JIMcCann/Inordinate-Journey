@@ -24,7 +24,8 @@ define(['game/assetPath', 'game/game', 'game/LevelOrder', 'util/functional'], fu
             game.load.audioSprite('audiosprite', // load the audiosprite
                 [assetPath + '/audio/audiosprite.mp3',
                  assetPath + '/audio/audiosprite.ogg',
-                 assetPath + '/audio/audiosprite.m4a'],
+                 assetPath + '/audio/audiosprite.m4a',
+                 assetPath + '/audio/audiosprite.ac3'],
                 assetPath + '/audio/audiosprite.json');
         },
         create: function () {

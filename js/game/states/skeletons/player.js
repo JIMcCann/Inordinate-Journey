@@ -63,15 +63,25 @@ function (game, keyDown, fadeOut, F, VM) {return {
         if (this.groups.solids) {
             this.game.physics.arcade.collide(this.player, this.groups.solids); // then treat them as solid
             this.game.physics.arcade.overlap(this.player, this.groups.solids, function (player, solid) {
-                let centerOf = function (obj) {
-                    return VM.vector(obj.x + obj.width/2, obj.y + obj.height/2);
+                let anySidePassable = false;
+                for (let k of ['up', 'down', 'left', 'right']) if (!solid.body.checkCollision[k]) {
+                    anySidePassable = true; break;
                 }
-                let centerDiff = VM.subtract(centerOf(solid.body), centerOf(player.body));
-                let V = VM.subtract(player, VM.scale(VM.normalize(centerDiff), 16));
-                player.x = V.x;
-                player.y = V.y;
+                if (!anySidePassable) {
+                    let centerOf = function (obj) {
+                        return VM.vector(obj.x + obj.width/2, obj.y + obj.height/2);
+                    }
+                    let centerDiff = VM.subtract(centerOf(solid.body), centerOf(player.body));
+                    let V = VM.subtract(player, VM.scale(VM.normalize(centerDiff), 16));
+                    player.x = V.x;
+                    player.y = V.y;
+                }
             });
         }
+    },
+    playerDie: function () {
+        this.game.audiosprite.stop();
+        F.curry(fadeOut, this.state.current).apply(null, this.initargs);
     },
     playerCollideHazards: function () {
         // If any sprites / etc declare themselves dangerous by being in the 'hazards' group:
@@ -112,7 +122,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
         this.player.body.velocity.x += this.reldirs.up.x*this.playerJumpStrength;
         this.player.body.velocity.y += this.reldirs.up.y*this.playerJumpStrength;
         this.player.animations.play('jump');
-        this.game.audiosprite.play('jump');
+        this.game.audiosprite.play('jump', 0.35);
     },
     playerDoWalk: function (vec) {
         this.player.body.velocity.x += vec.x*this.playerWalkStrength;
@@ -143,7 +153,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
     },
     playerRespondJump: function () {
         if (keyDown(VM.direction(this.reldirs.up)) // If we're trying to jump
-                && this.playerOnGround()) { // from standing or walking:
+                && this.playerStanding()) { // from standing or walking:
             this.playerDoJump(); // then we can
             return true;
         }
@@ -173,14 +183,18 @@ function (game, keyDown, fadeOut, F, VM) {return {
         let hardness = this.relspeeds.down*VM.magnitude(this.player.body.velocity);
         if (hardness > 600)
             this.game.audiosprite.play('hard-land');
-        else if (hardness > 150) this.game.audiosprite.play('land');
+        else if (hardness > 100) this.game.audiosprite.play('land', 0.6);
         // avoid thok-thok-thok glitch by not making a sound at all if we landed really lightly
+    },
+    playerDoForceLanding: function () {
+        this.player.animations.play('walk');
+        this.playerPlayLandingSound();
     },
     playerDoLandFromFall: function () {
         if (['fall', 'jump'].includes(this.player.animations.name) // If we're falling
                 && this.playerOnGround()) { // but just landed
-            this.player.animations.play('walk'); // then we're walking (and possibly about to stand still)
-            this.playerPlayLandingSound();
+            // then land
+            this.playerDoForceLanding();
         }
     },
     playerDoStandStillFromWalk: function () {
