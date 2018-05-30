@@ -23,8 +23,11 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         plat.body.checkCollision.right = true;
         return plat;
     },
-    spawnStatic: function (name) {
-        let plat = this.groups.hazards.create(390, 0, 'atlas', name);
+    spawnStatic: function () {
+        let plat = this.groups.hazards.create(390, 0, 'atlas', 'tesla-1');
+        plat.animations.add('idle', [
+            'tesla-1', 'tesla-2', 'tesla-3', 'tesla-off', 'tesla-off', 'tesla-off'
+        ], 10, true);
         let pos = Math.ceil(Math.random()*2);
         if (pos == 1){
             plat.x=115;
@@ -33,7 +36,9 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         plat.body.velocity.y=100;
         plat.body.immovable = true;
         plat.angle=90;
+        if (pos != 1) plat.angle = -plat.angle;
         plat.body.setSize(plat.height/plat.scale.y,plat.width/plat.scale.x);
+        plat.animations.play('idle');
         //plat.body.checkCollision.top = false;
         plat.body.checkCollision.left = true;
         plat.body.checkCollision.right = true;
@@ -47,7 +52,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.groups.hazards.enableBody = true;
         this.timer = this.game.time.create(false);
         this.timer.loop(4000, function () {
-            this.spawnStatic('platform-1');
+            this.spawnStatic();
         }, this);
         this.timer.start();
         
@@ -77,10 +82,10 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.world.sendToBack(this.groups.solids);
         this.world.sendToBack(this.triangularDude);
 
-        this.B1=this.game.add.tileSprite(0,0,100,this.game.height,'background1');
+        this.B1=this.game.add.tileSprite(0,0,100,this.game.height,'atlas', 'metal-wall');
         this.game.physics.arcade.enable(this.B1);
         this.B1.body.immovable=true;
-        this.B2=this.game.add.tileSprite(this.game.width,0,100,this.game.height,'background2');
+        this.B2=this.game.add.tileSprite(this.game.width,0,100,this.game.height,'atlas', 'metal-wall');
         
         this.game.physics.arcade.enable(this.B2);
         this.B2.scale.x *=-1;
@@ -125,7 +130,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
 
     },
     render:function(){
-        this.game.debug.body(this.B2);
+        //this.game.debug.body(this.B2);
     }
 };});
 
