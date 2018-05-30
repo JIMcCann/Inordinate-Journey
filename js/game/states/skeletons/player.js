@@ -63,9 +63,10 @@ function (game, keyDown, fadeOut, F, VM) {return {
         if (this.groups.solids) {
             this.game.physics.arcade.collide(this.player, this.groups.solids); // then treat them as solid
             this.game.physics.arcade.overlap(this.player, this.groups.solids, function (player, solid) {
-                let anySidePassable = true;
-                for (let k of ['up', 'down', 'left', 'right'])
-                    anySidePassable &&= !solid.body.checkCollision[k];
+                let anySidePassable = false;
+                for (let k of ['up', 'down', 'left', 'right']) if (!solid.body.checkCollision[k]) {
+                    anySidePassable = true; break;
+                }
                 if (!anySidePassable) {
                     let centerOf = function (obj) {
                         return VM.vector(obj.x + obj.width/2, obj.y + obj.height/2);
