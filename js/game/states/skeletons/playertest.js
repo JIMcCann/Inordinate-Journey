@@ -1,7 +1,8 @@
 /*  game/states/skeletons/playertest
     A dumb test map with smiley geometry shapes */
-define(['game/keyDown', 'game/states/skeletons/portal', 'util/functional', 'util/vectorMath'],
-function (keyDown, portal, F, VM) {return {
+define(['game/keyDown', 'game/states/skeletons/portal',
+    'game/states/skeletons/fireball', 'util/functional', 'util/vectorMath'],
+function (keyDown, portal, fireball, F, VM) {return {
     preload: function () {
 		// Hi!
 		// wEELLLLl heLLO theR
@@ -17,6 +18,7 @@ function (keyDown, portal, F, VM) {return {
         return plat;
     },
     create: function () {
+        this.addSkel(fireball);
         this.portal = undefined;
 		// Positioning the player at the start of the level
         this.player.x = this.game.width/2;
@@ -43,6 +45,10 @@ function (keyDown, portal, F, VM) {return {
         this.lava.height = 50;
         this.lava.animations.add('idle', ['lava-1', 'lava-2', 'lava-3', 'lava-4', 'lava-5'], 10, true);
         this.lava.animations.play('idle');
+        let STATE = this;
+        this.lava.update = function () {
+            STATE.groups.hazards.bringToTop(this);
+        };
 
 		// Setting a timer that will randomly generate platforms
 		// starting from the top of the screen using 'spawnPlatform'
@@ -69,41 +75,6 @@ function (keyDown, portal, F, VM) {return {
             this.player.x - exampleplat.width/2,
             this.player.y + this.player.height/2);
         this.portalTimeout = 1000;
-    },
-    spawnFireball: function () {
-        let fball = this.groups.hazards.create(Math.random()*this.game.width, 570, 'atlas', 'fireball');
-        fball.anchor.setTo(0.5);
-        fball.scale.setTo(Math.random() + 1.5);
-        fball.body.velocity.y = -Math.random()*300 - 300;
-        fball.body.velocity.x = Math.random()*250 - 125;
-        fball.body.gravity.y = 300;
-        fball.fliptimeout = 15;
-        let STATE = this;
-        fball.update = function () {
-            this.angle = VM.angle(this.body.velocity) + 90;
-            fball.fliptimeout--;
-            if (fball.fliptimeout <= 0) {
-                fball.fliptimeout = 15;
-                fball.scale.x *= -1;
-            }
-            if (Math.random() < 0.005) {
-                if (this.scale.y > 1) {
-                    let parts = Math.ceil(Math.random()*5) + 1;
-                    for (let i = 0; i < parts; i++) {
-                        let part = STATE.spawnFireball();
-                        part.x = this.x;
-                        part.y = this.y;
-                        part.scale.setTo(this.scale.y/Math.sqrt(parts));
-                        part.body.velocity.x += this.body.velocity.x;
-                        part.body.velocity.x /= 2;
-                        part.body.velocity.y += this.body.velocity.y;
-                        part.body.velocity.y /= 2;
-                    }
-                    this.destroy();
-                }
-            }
-        };
-        return fball;
     },
     update: function () {
         if (Math.random() < 0.01) this.spawnFireball();
