@@ -45,7 +45,7 @@ function (keyDown, portal, spacebg, triangle, F, VM) {return {
         // Use arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		
-        this.game.audiosprite.play('spacelava');
+//        this.game.audiosprite.play('spacelava');
 		
 		this.player.y = this.game.height; // Start the player at the bottom of the screen
 		let g = VM.rotate(this.player.body.gravity, 180);

@@ -30,7 +30,7 @@ function (keyDown, portal, fireball, F, VM) {return {
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
 		// Play audio
-        this.game.audiosprite.play('spacelava');
+//        this.game.audiosprite.play('spacelava');
 
 		// Create 'solids' group
         this.groups.solids = this.add.group();
