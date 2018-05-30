@@ -14,6 +14,7 @@ function (keyDown, portal, spacebg, triangle, fireball, F, VM) {return {
         return planet;
     },
     create: function () {
+        this.game.audiosprite.play('bgm-moon');
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.addSkel(fireball);

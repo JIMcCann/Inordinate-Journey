@@ -40,6 +40,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         return plat;
     },
     create: function () {
+        this.game.audiosprite.play('bgm-side-to-side');
         
         this.groups.hazards = this.add.group();
         this.groups.hazards.enableBody = true;

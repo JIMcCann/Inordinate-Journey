@@ -18,6 +18,7 @@ function (keyDown, portal, fireball, F, VM) {return {
         return plat;
     },
     create: function () {
+        this.game.audiosprite.play('bgm-lava');
         this.addSkel(fireball);
         this.portal = undefined;
 		// Positioning the player at the start of the level

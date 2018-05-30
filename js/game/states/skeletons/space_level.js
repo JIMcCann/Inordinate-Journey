@@ -28,6 +28,7 @@ function (keyDown, portal, spacebg, triangle, F, VM) {return {
 	
 	},
     create: function () {
+        this.game.audiosprite.play('bgm-moon');
         this.addSkel(spacebg);
         this.portal = undefined;
         this.player.x = this.game.width/2;

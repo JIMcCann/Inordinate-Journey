@@ -6,154 +6,169 @@
     "audiosprite.ac3"
   ],
   "spritemap": {
-    "hard-land": {
+    "bgm-lava": {
       "start": 0,
-      "end": 0.5122902494331065,
+      "end": 95.78496598639455,
+      "loop": false
+    },
+    "bgm-moon": {
+      "start": 97,
+      "end": 502.4089795918367,
+      "loop": false
+    },
+    "bgm-side-to-side": {
+      "start": 504,
+      "end": 781.6089795918367,
+      "loop": false
+    },
+    "hard-land": {
+      "start": 783,
+      "end": 783.5122902494331,
       "loop": false
     },
     "jump": {
-      "start": 2,
-      "end": 2.164013605442177,
+      "start": 785,
+      "end": 785.1640136054422,
       "loop": false
     },
     "land": {
-      "start": 4,
-      "end": 4.315986394557823,
+      "start": 787,
+      "end": 787.3159863945579,
       "loop": false
     },
     "spacelava": {
-      "start": 6,
-      "end": 80.84401360544217,
-      "loop": true
+      "start": 789,
+      "end": 863.8440136054421,
+      "loop": false
     },
     "step-10": {
-      "start": 82,
-      "end": 82.67192743764173,
+      "start": 865,
+      "end": 865.6719274376417,
       "loop": false
     },
     "step-11": {
-      "start": 84,
-      "end": 84.38458049886621,
+      "start": 867,
+      "end": 867.3845804988662,
       "loop": false
     },
     "step-12": {
-      "start": 86,
-      "end": 86.58775510204082,
+      "start": 869,
+      "end": 869.5877551020408,
       "loop": false
     },
     "step-13": {
-      "start": 88,
-      "end": 88.43102040816326,
+      "start": 871,
+      "end": 871.4310204081632,
       "loop": false
     },
     "step-14": {
-      "start": 90,
-      "end": 90.45424036281179,
+      "start": 873,
+      "end": 873.4542403628118,
       "loop": false
     },
     "step-15": {
-      "start": 92,
-      "end": 92.47165532879819,
+      "start": 875,
+      "end": 875.4716553287982,
       "loop": false
     },
     "step-16": {
-      "start": 94,
-      "end": 94.53260770975056,
+      "start": 877,
+      "end": 877.5326077097506,
       "loop": false
     },
     "step-17": {
-      "start": 96,
-      "end": 96.37587301587301,
+      "start": 879,
+      "end": 879.375873015873,
       "loop": false
     },
     "step-18": {
-      "start": 98,
-      "end": 98.50068027210884,
+      "start": 881,
+      "end": 881.5006802721089,
       "loop": false
     },
     "step-19": {
-      "start": 100,
-      "end": 100.39328798185942,
+      "start": 883,
+      "end": 883.3932879818594,
       "loop": false
     },
     "step-1": {
-      "start": 102,
-      "end": 102.50068027210884,
+      "start": 885,
+      "end": 885.5006802721089,
       "loop": false
     },
     "step-20": {
-      "start": 104,
-      "end": 104.53551020408163,
+      "start": 887,
+      "end": 887.5355102040817,
       "loop": false
     },
     "step-21": {
-      "start": 106,
-      "end": 106.46294784580499,
+      "start": 889,
+      "end": 889.4629478458049,
       "loop": false
     },
     "step-22": {
-      "start": 108,
-      "end": 108.52680272108843,
+      "start": 891,
+      "end": 891.5268027210884,
       "loop": false
     },
     "step-23": {
-      "start": 110,
-      "end": 110.45133786848072,
+      "start": 893,
+      "end": 893.4513378684808,
       "loop": false
     },
     "step-24": {
-      "start": 112,
-      "end": 112.5035827664399,
+      "start": 895,
+      "end": 895.5035827664399,
       "loop": false
     },
     "step-25": {
-      "start": 114,
-      "end": 114.46294784580499,
+      "start": 897,
+      "end": 897.4629478458049,
       "loop": false
     },
     "step-26": {
-      "start": 116,
-      "end": 116.5035827664399,
+      "start": 899,
+      "end": 899.5035827664399,
       "loop": false
     },
     "step-2": {
-      "start": 118,
-      "end": 118.50068027210884,
+      "start": 901,
+      "end": 901.5006802721089,
       "loop": false
     },
     "step-3": {
-      "start": 120,
-      "end": 120.50648526077097,
+      "start": 903,
+      "end": 903.506485260771,
       "loop": false
     },
     "step-4": {
-      "start": 122,
-      "end": 122.5297052154195,
+      "start": 905,
+      "end": 905.5297052154195,
       "loop": false
     },
     "step-5": {
-      "start": 124,
-      "end": 124.37587301587301,
+      "start": 907,
+      "end": 907.375873015873,
       "loop": false
     },
     "step-6": {
-      "start": 126,
-      "end": 126.38458049886621,
+      "start": 909,
+      "end": 909.3845804988662,
       "loop": false
     },
     "step-7": {
-      "start": 128,
-      "end": 128.47746031746033,
+      "start": 911,
+      "end": 911.4774603174603,
       "loop": false
     },
     "step-8": {
-      "start": 130,
-      "end": 130.30331065759637,
+      "start": 913,
+      "end": 913.3033106575964,
       "loop": false
     },
     "step-9": {
-      "start": 132,
-      "end": 132.43102040816328,
+      "start": 915,
+      "end": 915.4310204081632,
       "loop": false
     }
   }

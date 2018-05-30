@@ -116,7 +116,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
         this.player.body.velocity.x += this.reldirs.up.x*this.playerJumpStrength;
         this.player.body.velocity.y += this.reldirs.up.y*this.playerJumpStrength;
         this.player.animations.play('jump');
-        this.game.audiosprite.play('jump');
+        this.game.audiosprite.play('jump', 0.6);
     },
     playerDoWalk: function (vec) {
         this.player.body.velocity.x += vec.x*this.playerWalkStrength;
