@@ -1,6 +1,4 @@
-/*  game/states/skeletons/playertest
-    A dumb test map with smiley geometry shapes */
-define({
+define(['util/vectorMath'], function (VM) {return {
     spawnFireball: function () {
         let fball = this.groups.hazards.create(Math.random()*this.game.width, 570, 'atlas', 'fireball');
         fball.anchor.setTo(0.5);
@@ -36,4 +34,4 @@ define({
         };
         return fball;
     }
-});
+};});

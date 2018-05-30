@@ -1,7 +1,7 @@
 define(['game/keyDown', 'game/states/skeletons/portal', 'game/states/skeletons/spacebg',
-    'game/states/skeletons/triangle',
+    'game/states/skeletons/triangle', 'game/states/skeletons/fireball',
     'util/functional', 'util/vectorMath'],
-function (keyDown, portal, spacebg, triangle, F, VM) {return {
+function (keyDown, portal, spacebg, triangle, fireball, F, VM) {return {
     spawnPlanet: function () {
         let planet = this.groups.solids.create(Math.random()*this.game.width, -100, 'atlas', 'asteroid');
         planet.anchor.setTo(0.5, 0.5);
@@ -16,6 +16,7 @@ function (keyDown, portal, spacebg, triangle, F, VM) {return {
     create: function () {
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
+        this.addSkel(fireball);
         this.addSkel(spacebg);
         this.spacebgspeed = -7;
         this.addSkel(triangle);
@@ -77,8 +78,17 @@ function (keyDown, portal, spacebg, triangle, F, VM) {return {
     update: function () {
         let triangdist = VM.scale(
             VM.normalize(VM.subtract(this.player, this.triangularDude.body.center)),
-            60);
+            30);
         this.triangularDude.body.velocity.setTo(triangdist.x, triangdist.y);
+        if (Math.random() < 0.007) {
+            let fball = this.spawnFireball();
+            fball.x = this.triangularDude.x;
+            fball.y = this.triangularDude.y;
+            fball.scale.setTo(fball.scale.y*2/3);
+            fball.body.velocity.setTo(
+                this.triangularDude.body.velocity.x*10,
+                this.triangularDude.body.velocity.y*10 - 100);
+        }
         this.nearestMassiveStrategy();
         if (this.player.y > this.game.height + 300)
             this.playerDie();
