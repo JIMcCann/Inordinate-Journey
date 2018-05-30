@@ -24,6 +24,7 @@ define(['game/game', 'util/functional'], function (game, F) {
         // and a full-screen graphics object as an overlay.
         // It then initializes the timer to use to decide how fast to fade out.
         create: function () {
+            this.game.audiosprite.stop();
             this.underlay = this.add.image(0, 0, 'underlay');
             this.overlay = this.add.graphics(0, 0);
             this.maxTimeout = 3;
