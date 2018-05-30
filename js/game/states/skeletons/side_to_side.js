@@ -3,7 +3,7 @@
 define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown, F, VM) {return {
     preload: function () {
         this.game.load.image('background1', 'assets/graphics/green1.png');
-        this.game.load.image('background2', 'assets/graphics/green2.png');
+        this.game.load.image('background2', 'assets/graphics/green1.png');
         // Hi!
         // wEELLLLl heLLO theR
     },
@@ -40,6 +40,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         return plat;
     },
     create: function () {
+        this.game.stage.backgroundColor='#4f4d4d';
         this.game.audiosprite.play('bgm-side-to-side');
         
         this.groups.hazards = this.add.group();
@@ -76,18 +77,30 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.world.sendToBack(this.groups.solids);
         this.world.sendToBack(this.triangularDude);
 
-        let B1=this.groups.solids.create(0,0, 'background1');
-        this.game.physics.arcade.enable(B1);
-        B1.body.immovable=true;
-        let B2=this.groups.solids.create(400,0, 'background2');
-        this.game.physics.arcade.enable(B2);
-        B2.body.immovable=true
+        this.B1=this.game.add.tileSprite(0,0,100,this.game.height,'background1');
+        this.game.physics.arcade.enable(this.B1);
+        this.B1.body.immovable=true;
+        this.B2=this.game.add.tileSprite(this.game.width,0,100,this.game.height,'background2');
+        
+        this.game.physics.arcade.enable(this.B2);
+        this.B2.scale.x *=-1;
+        this.B2.body.immovable=true
+        this.B2.tilePosition.y-=200;
+
+        this.groups.solids.add(this.B1);
+        this.groups.solids.add(this.B2);
     },
     update: function () {
 
         //this.groups.solids.forEach(function(platform){platform.body.y += 1;});
         // Using velocity for this to fix player bounce glitch
         // Rotate gravity whenever space is held (assumes the player is loaded into the SSC)
+        this.B1.tilePosition.y -= 2;
+        this.B2.tilePosition.y -= 2;
+        if (!keyDown('up') && !keyDown('down')){
+            this.player.y-=2;
+        }
+
         if (keyDown('spacebar')) {
             
             console.log(this.player.x);
@@ -110,5 +123,10 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
             this.player.body.gravity.y = g.y;
         }
 
+    },
+    render:function(){
+        this.game.debug.body(this.B2);
     }
 };});
+
+
