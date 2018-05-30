@@ -122,7 +122,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
         this.player.body.velocity.x += this.reldirs.up.x*this.playerJumpStrength;
         this.player.body.velocity.y += this.reldirs.up.y*this.playerJumpStrength;
         this.player.animations.play('jump');
-        this.game.audiosprite.play('jump', 0.6);
+        this.game.audiosprite.play('jump', 0.35);
     },
     playerDoWalk: function (vec) {
         this.player.body.velocity.x += vec.x*this.playerWalkStrength;
@@ -183,7 +183,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
         let hardness = this.relspeeds.down*VM.magnitude(this.player.body.velocity);
         if (hardness > 600)
             this.game.audiosprite.play('hard-land');
-        else if (hardness > 150) this.game.audiosprite.play('land');
+        else if (hardness > 100) this.game.audiosprite.play('land', 0.6);
         // avoid thok-thok-thok glitch by not making a sound at all if we landed really lightly
     },
     playerDoForceLanding: function () {
