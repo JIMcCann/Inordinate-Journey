@@ -7,17 +7,27 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         // Hi!
         // wEELLLLl heLLO theR
     },
-    spawnSaw: function (name) {
-        let plat = this.groups.hazards.create(390, 0, 'atlas', name);
+    spawnSaw: function () {
+        let plat = this.groups.hazards.create(390, 0, 'atlas', 'saw-1');
+        plat.animations.add('idle', [
+            'saw-1', 'saw-2', 'saw-3', 'saw-4',
+            'saw-5', 'saw-6', 'saw-7', 'saw-8'
+        ], 4, true);
         let pos = Math.ceil(Math.random()*2);
         if (pos == 1){
             plat.x=115;
         }
         plat.anchor.setTo(0.5);
-        plat.body.velocity.y=100;
+        plat.body.velocity.y=300;
         plat.body.immovable = true;
         plat.angle=90;
         plat.body.setSize(plat.height/plat.scale.y,plat.width/plat.scale.x);
+        plat.animations.play('idle');
+        plat.swaptimeout = 80;
+/*        plat.update = function* () {
+            for (let i = 0; i < this.swaptimeout; ++i) yield;
+            this.body.velocity.x = 300 - 
+        }*/
         //plat.body.checkCollision.top = false;
         plat.body.checkCollision.left = true;
         plat.body.checkCollision.right = true;
@@ -44,6 +54,10 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         plat.body.checkCollision.right = true;
         return plat;
     },
+    spawnHaz: function () {
+        let hazspawners = [this.spawnStatic, this.spawnSaw];
+        hazspawners[Math.floor(Math.random()*hazspawners.length)].call(this);
+    },
     create: function () {
         this.game.stage.backgroundColor='#4f4d4d';
         this.game.audiosprite.play('bgm-side-to-side');
@@ -52,7 +66,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.groups.hazards.enableBody = true;
         this.timer = this.game.time.create(false);
         this.timer.loop(4000, function () {
-            this.spawnStatic();
+            this.spawnHaz();
         }, this);
         this.timer.start();
         
