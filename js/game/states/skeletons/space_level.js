@@ -63,7 +63,7 @@ function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
         this.background = this.groups.solids.create(0,0,'atlas','moon');
-        this.addTicktimerEvent(1, function () {this.background.y--;});
+        this.addTicktimerEvent(1, function () {this.background.y -= 0.15;});
         this.background.anchor.setTo(0,1);
         this.background.body.immovable=true;
         this.background.width = this.game.width;
