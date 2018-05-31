@@ -1,9 +1,9 @@
 /*  game/states/skeletons/playertest
     A dumb test map with smiley geometry shapes */
 define(['game/keyDown', 'game/states/skeletons/portal', 'game/states/skeletons/spacebg',
-    'game/states/skeletons/triangle',
+    'game/states/skeletons/triangle', 'game/states/skeletons/ticktimer',
     'util/functional', 'util/vectorMath'],
-function (keyDown, portal, spacebg, triangle, F, VM) {return {
+function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
     preload: function () {
 		// Hi!
 		// wEELLLLl heLLO theR
@@ -28,6 +28,7 @@ function (keyDown, portal, spacebg, triangle, F, VM) {return {
 	
 	},
     create: function () {
+        this.addSkel(ticktimer);
         this.game.audiosprite.play('bgm-moon');
         this.addSkel(spacebg);
         this.portal = undefined;
@@ -35,12 +36,13 @@ function (keyDown, portal, spacebg, triangle, F, VM) {return {
         this.player.y = this.game.height/3;
 		this.game.stage.backgroundColor = '#034b59';
 		
-		this.timer = this.game.time.create(false);
-		this.timer.loop(1300, function () {
-		    this.spawnPlatform('platform-moon-' + (Math.floor(Math.random()*3) + 1),
+		this.addTicktimerEvent(100, function (ticks) {
+		    let p = this.spawnPlatform(
+		        'platform-moon-' + (Math.floor(Math.random()*3) + 1),
 		        Math.random()*400, this.game.height+100);
-		}, this);
-		this.timer.start();
+		    p.body.velocity.y *= ticks/1200 + 1;
+		    return 0.992;
+		});
 		
         // Use arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -61,6 +63,7 @@ function (keyDown, portal, spacebg, triangle, F, VM) {return {
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
         this.background = this.groups.solids.create(0,0,'atlas','moon');
+        this.addTicktimerEvent(1, function () {this.background.y--;});
         this.background.anchor.setTo(0,1);
         this.background.body.immovable=true;
         this.background.width = this.game.width;
@@ -78,7 +81,12 @@ function (keyDown, portal, spacebg, triangle, F, VM) {return {
         lava.width = 800;
         lava.height = 50;
 
-        this.portalTimeout = 1500;
+        this.addTicktimerEvent(2500, function () {
+		    if (!this.portal) this.addSkel(portal);
+		    this.portal.x = Math.random()*this.game.width;
+		    this.portal.y = this.game.height;
+		    this.portal.body.velocity.y = -120;
+        });
         this.player.y -= 300;
     },
     update: function () {
@@ -86,23 +94,10 @@ function (keyDown, portal, spacebg, triangle, F, VM) {return {
 		//this.groups.solids.forEach(function(platform){platform.body.y += 1;});
 		// Using velocity for this to fix player bounce glitch
 
-        this.background.y-=1/4;
-        // Rotate gravity whenever space is held (assumes the player is loaded into the SSC)
-        if (keyDown('spacebar')) {
-            
-			console.log(this.player.x);
-        }
         // Gooferino the triangle duderino
         this.triangularDude.body.angularVelocity += 0.2;
 		this.entityWrap(this.player); // wrapping on player
 		this.entityWrap(this.triangularDude); // wrapping on triangularDude
 		
-		this.portalTimeout--;
-		if (this.portalTimeout <= 0 && this.portal == undefined) {
-		    this.addSkel(portal);
-		    this.portal.x = Math.random()*this.game.width;
-		    this.portal.y = this.game.height;
-		    this.portal.body.velocity.y = -12;
-		}
     }
 };});
