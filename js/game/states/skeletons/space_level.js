@@ -59,6 +59,7 @@ function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
         this.triangularDude.scale.setTo(1, -1);
 		this.triangularDude.body.velocity.x = 100;
 		this.triangularDude.body.angularVelocity = 6;
+		this.triangularDude.anchor.setTo(0.5, 0.5);
 		
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
@@ -99,5 +100,8 @@ function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
 		this.entityWrap(this.player); // wrapping on player
 		this.entityWrap(this.triangularDude); // wrapping on triangularDude
 		
+    },
+    render: function () {
+//        this.game.debug.body(this.triangularDude);
     }
 };});
