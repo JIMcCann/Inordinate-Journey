@@ -41,7 +41,7 @@ function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
 		        'platform-moon-' + (Math.floor(Math.random()*3) + 1),
 		        Math.random()*400, this.game.height+100);
 		    p.body.velocity.y *= ticks/1200 + 1;
-		    return 0.992;
+		    return 0.983;
 		});
 		
         // Use arcade physics
