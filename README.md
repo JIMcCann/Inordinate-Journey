@@ -12,7 +12,7 @@ so we relocated them.
 So, whenever you clone or download the repo fresh from scratch,
 you'll have to get all the audio files from
 [this Google Drive folder](https://drive.google.com/drive/folders/1DchB7iDGFa6uyhD2mwipnPnNXuualeTm).
-For them to work properly, you'll want to put all five files in /assets/audio.
+For them to work properly, you'll want to put all five files in **/assets/audio**.
 
 IF YOU DON'T DOWNLOAD THE AUDIOSPRITE FILES, THE GAME WILL NOT RUN.
 I'm going to work on a fix for this, so that even if you forget this stuff,
