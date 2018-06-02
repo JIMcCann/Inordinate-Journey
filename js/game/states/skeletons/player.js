@@ -28,7 +28,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
         this.camera.follow(this.player); // camera should follow player
         this.playerStepTimer = 30; // 30 frames until next step noise
         this.playerWalkStrength = 30;
-        this.playerJumpStrength = 220;
+        this.playerJumpStrength = 240;
         this.playerMinRunSpeed = 210;
         this.playerFriction = 0.11;
         this.reldirs = {}; // Recalculate once per update loop

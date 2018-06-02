@@ -2,8 +2,9 @@
     A dumb test map with smiley geometry shapes */
 define(['game/keyDown', 'game/states/skeletons/portal', 'game/states/skeletons/spacebg',
     'game/states/skeletons/triangle', 'game/states/skeletons/ticktimer',
+    'game/states/skeletons/flashingText',
     'util/functional', 'util/vectorMath'],
-function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
+function (keyDown, portal, spacebg, triangle, ticktimer, flashingText, F, VM) {return {
     preload: function () {
 		// Hi!
 		// wEELLLLl heLLO theR
@@ -29,6 +30,7 @@ function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
 	},
     create: function () {
         this.addSkel(ticktimer);
+        this.addSkel(flashingText);
         this.game.audiosprite.play('bgm-moon');
         this.addSkel(spacebg);
         this.portal = undefined;
@@ -43,7 +45,14 @@ function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
 		    p.body.velocity.y *= ticks/1200 + 1;
 		    return 0.983;
 		});
-		
+		this.addTicktimerEvent(1300, function () {
+		    this.flashingText('Leaving orbit...');
+		    return false; // don't run this again, only once
+		});
+        this.addTicktimerEvent(1700, function () {
+            this.flashingText('Incoming rectangulo-planetoid field!!');
+            return false;
+        });
         // Use arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		
@@ -81,7 +90,6 @@ function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
         let lava = this.groups.hazards.create(0, 0-50, 'atlas', 'lava');
         lava.width = 800;
         lava.height = 50;
-
         this.addTicktimerEvent(2500, function () {
 		    if (!this.portal) this.addSkel(portal);
 		    this.portal.x = Math.random()*this.game.width;
@@ -99,7 +107,6 @@ function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
         this.triangularDude.body.angularVelocity += 0.2;
 		this.entityWrap(this.player); // wrapping on player
 		this.entityWrap(this.triangularDude); // wrapping on triangularDude
-		
     },
     render: function () {
 //        this.game.debug.body(this.triangularDude);
