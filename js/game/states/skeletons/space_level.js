@@ -50,6 +50,15 @@ function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
 		    return 0.983;
 		});
 		
+		// timers to show messages
+		this.addTicktimerEvent(1300, function () {
+		    this.flashingText('Leaving orbit...');
+		    return false;
+		});
+		this.addTicktimerEvent(1700, function () {
+		    this.flashingText('Incoming rectangulo-planetoid field!!');
+		    return false;
+		});
         // Use arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 				
