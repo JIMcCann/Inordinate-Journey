@@ -71,6 +71,7 @@ function (keyDown, portal, spacebg, triangle, F, VM) {return {
             this.spawnPlatform('platform-moon-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
 
+        this.spacebgspeed=-this.spacebgspeed;
 		
 		// Lava is offscreen at the top just to kill the player.
 		// Should fix.
@@ -86,7 +87,7 @@ function (keyDown, portal, spacebg, triangle, F, VM) {return {
 		//this.groups.solids.forEach(function(platform){platform.body.y += 1;});
 		// Using velocity for this to fix player bounce glitch
 
-        this.background.y-=1/4;
+        this.background.y -=1/4;
         // Rotate gravity whenever space is held (assumes the player is loaded into the SSC)
         if (keyDown('spacebar')) {
             
