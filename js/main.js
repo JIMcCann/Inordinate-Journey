@@ -21,6 +21,6 @@ function (functionCaller, setup, titleScreen,
         * the groups skeleton (which makes sure the state has a 'groups' property)
         * the player skeleton (which adds the player character)
         * the playertest skeleton (which adds the silly little test room) */
-    LevelOrder.order = [tutorial, planetLevel, rainLevel, playertest, spaceLevel, sideToSide, planetLevel];
+    LevelOrder.order = [tutorial, playertest, spaceLevel, sideToSide, planetLevel, rainLevel];
     setup('functionCaller', titleScreen);
 });
