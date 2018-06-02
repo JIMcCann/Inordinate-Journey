@@ -73,7 +73,7 @@ function (keyDown, portal, spacebg, triangle, ticktimer, flashingText, F, VM) {r
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
         this.background = this.groups.solids.create(0,0,'atlas','moon');
-        this.addTicktimerEvent(1, function () {this.background.y -= 0.15;});
+        this.addTicktimerEvent(1, function () {this.background.y -= 0.25;});
         this.background.anchor.setTo(0,1);
         this.background.body.immovable=true;
         this.background.width = this.game.width;
@@ -84,6 +84,7 @@ function (keyDown, portal, spacebg, triangle, ticktimer, flashingText, F, VM) {r
             this.spawnPlatform('platform-moon-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
 
+        this.spacebgspeed=-this.spacebgspeed;
 		
 		// Lava is offscreen at the top just to kill the player.
 		// Should fix.
