@@ -5,6 +5,7 @@ define(['game/keyDown', 'game/states/skeletons/portal',
     'util/functional', 'util/vectorMath'],
 function (keyDown, portal, fireball, ticktimer, F, VM) {return {
     preload: function () {
+        this.game.load.image('side1', 'assets/graphics/lavalside.png');
 		// Hi!
 		// wEELLLLl heLLO theR
     },
@@ -75,6 +76,15 @@ function (keyDown, portal, fireball, ticktimer, F, VM) {return {
             exampleplat = this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
 
+        this.back1=this.game.add.tileSprite(-50,0,150,600,'side1');
+        this.world.sendToBack(this.back1);
+
+        this.back2=this.game.add.tileSprite(550,0,150,600,'side1');
+        this.back2.scale.x *=-1;
+        this.back2.tilePosition.y-=200;
+        this.world.sendToBack(this.back2);
+
+
         this.lavarock = this.game.add.tileSprite(0,0,500,600,'atlas', 'volcano-wall');
         this.world.sendToBack(this.lavarock);
         let startplatform = this.spawnPlatform('platform-1',
@@ -93,6 +103,10 @@ function (keyDown, portal, fireball, ticktimer, F, VM) {return {
 
 		//this.groups.solids.forEach(function(platform){platform.body.y += 1;});
 		// Using velocity for this to fix player bounce glitch
+
+        this.back1.tilePosition.y +=1;
+        this.back2.tilePosition.y +=1;
+
 
         this.lavarock.tilePosition.y -= 2;
         /*

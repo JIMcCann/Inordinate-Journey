@@ -68,11 +68,10 @@ function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
 		// Add solids group
         this.groups.solids = this.add.group();
         this.groups.solids.enableBody = true;
-		
 		// Add moon to solids
         this.moon = this.groups.solids.create(0,0,'atlas','moon');
 		// Set the moon to scroll
-        this.addTicktimerEvent(1, function () {this.moon.y -= 0.15;});
+        this.addTicktimerEvent(1, function () {this.moon.y -= 0.25;});
         this.moon.anchor.setTo(0,1);
         this.moon.body.immovable=true;
         this.moon.width = this.game.width;
@@ -86,6 +85,8 @@ function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
         for(let i = -1; i<10; i++)
             this.spawnPlatform('platform-moon-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
+      
+        this.spacebgspeed=-this.spacebgspeed;
 		
 		// Lazy way of making a kill zone
         let killZone = this.groups.hazards.create(0, -100, 'atlas', 'moon');
