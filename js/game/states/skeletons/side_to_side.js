@@ -4,40 +4,85 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
     preload: function () {
         this.game.load.image('background1', 'assets/graphics/green1.png');
         this.game.load.image('background2', 'assets/graphics/green1.png');
+        this.game.load.image('background3', 'assets/graphics/sheetmetal.png');
         // Hi!
         // wEELLLLl heLLO theR
     },
-    spawnSaw: function (name) {
-        let plat = this.groups.hazards.create(390, 0, 'atlas', name);
+    spawnSaw: function () {
+        let plat = this.groups.hazards.create(400, 0, 'atlas', 'saw-1');
+        plat.animations.add('idle', [
+            'saw-1', 'saw-2', 'saw-3', 'saw-4',
+            'saw-5', 'saw-6', 'saw-7', 'saw-8'
+        ], 4, true);
         let pos = Math.ceil(Math.random()*2);
         if (pos == 1){
-            plat.x=115;
+            plat.x=100;
         }
         plat.anchor.setTo(0.5);
-        plat.body.velocity.y=100;
+        plat.scale.x*=-1;
+        plat.body.velocity.y=300;
         plat.body.immovable = true;
         plat.angle=90;
         plat.body.setSize(plat.height/plat.scale.y,plat.width/plat.scale.x);
+        if (pos != 1) plat.angle = -plat.angle;
+        plat.animations.play('idle');
+        plat.swaptimeout = 80;
+/*        plat.update = function* () {
+            for (let i = 0; i < this.swaptimeout; ++i) yield;
+            this.body.velocity.x = 300 - 
+        }*/
         //plat.body.checkCollision.top = false;
         plat.body.checkCollision.left = true;
         plat.body.checkCollision.right = true;
         return plat;
     },
-    spawnStatic: function (name) {
-        let plat = this.groups.hazards.create(390, 0, 'atlas', name);
+    /*spawnSpikes: function () {
+        let plat = this.groups.hazards.create(385, 0, 'atlas', 'tesla-1');
+        plat.animations.add('idle', [
+            'tesla-1', 'tesla-2', 'tesla-3', 'tesla-off', 'tesla-off', 'tesla-off'
+        ], 10, true);
         let pos = Math.ceil(Math.random()*2);
         if (pos == 1){
             plat.x=115;
         }
+        plat.scale.setTo(2);
         plat.anchor.setTo(0.5);
         plat.body.velocity.y=100;
         plat.body.immovable = true;
         plat.angle=90;
+        if (pos != 1) plat.angle = -plat.angle;
         plat.body.setSize(plat.height/plat.scale.y,plat.width/plat.scale.x);
+        plat.animations.play('idle');
         //plat.body.checkCollision.top = false;
         plat.body.checkCollision.left = true;
         plat.body.checkCollision.right = true;
         return plat;
+    },*/
+    spawnTesla: function () {
+        let plat = this.groups.hazards.create(385, 0, 'atlas', 'tesla-1');
+        plat.animations.add('idle', [
+            'tesla-1', 'tesla-2', 'tesla-3', 'tesla-off', 'tesla-off', 'tesla-off'
+        ], 10, true);
+        let pos = Math.ceil(Math.random()*2);
+        if (pos == 1){
+            plat.x=115;
+        }
+        plat.scale.setTo(2);
+        plat.anchor.setTo(0.5);
+        plat.body.velocity.y=100;
+        plat.body.immovable = true;
+        plat.angle=90;
+        if (pos != 1) plat.angle = -plat.angle;
+        plat.body.setSize(plat.height/plat.scale.y,plat.width/plat.scale.x);
+        plat.animations.play('idle');
+        //plat.body.checkCollision.top = false;
+        plat.body.checkCollision.left = true;
+        plat.body.checkCollision.right = true;
+        return plat;
+    },
+    spawnHaz: function () {
+        let hazspawners = [this.spawnTesla, this.spawnSaw];
+        hazspawners[Math.floor(Math.random()*hazspawners.length)].call(this);
     },
     create: function () {
         this.game.stage.backgroundColor='#4f4d4d';
@@ -46,8 +91,8 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.groups.hazards = this.add.group();
         this.groups.hazards.enableBody = true;
         this.timer = this.game.time.create(false);
-        this.timer.loop(4000, function () {
-            this.spawnStatic('platform-1');
+        this.timer.loop(1000, function () {
+            this.spawnHaz();
         }, this);
         this.timer.start();
         
@@ -76,11 +121,15 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.groups.solids.enableBody = true;
         this.world.sendToBack(this.groups.solids);
         this.world.sendToBack(this.triangularDude);
+        this.world.sendToBack(this.groups.hazards);
 
-        this.B1=this.game.add.tileSprite(0,0,100,this.game.height,'background1');
+        this.back=this.game.add.tileSprite(0,0,800,600,'background3');
+        this.world.sendToBack(this.back);
+
+        this.B1=this.game.add.tileSprite(0,0,100,this.game.height,'atlas', 'metal-wall');
         this.game.physics.arcade.enable(this.B1);
         this.B1.body.immovable=true;
-        this.B2=this.game.add.tileSprite(this.game.width,0,100,this.game.height,'background2');
+        this.B2=this.game.add.tileSprite(this.game.width,0,100,this.game.height,'atlas', 'metal-wall');
         
         this.game.physics.arcade.enable(this.B2);
         this.B2.scale.x *=-1;
@@ -95,6 +144,8 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         //this.groups.solids.forEach(function(platform){platform.body.y += 1;});
         // Using velocity for this to fix player bounce glitch
         // Rotate gravity whenever space is held (assumes the player is loaded into the SSC)
+        this.back.tilePosition.y +=2;
+
         this.B1.tilePosition.y -= 2;
         this.B2.tilePosition.y -= 2;
         if (!keyDown('up') && !keyDown('down')){
@@ -125,8 +176,6 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
 
     },
     render:function(){
-        this.game.debug.body(this.B2);
+        //this.game.debug.body(this.B2);
     }
 };});
-
-
