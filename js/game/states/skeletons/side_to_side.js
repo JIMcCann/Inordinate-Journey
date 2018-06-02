@@ -2,9 +2,6 @@
     A dumb test map with smiley geometry shapes */
 define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown, F, VM) {return {
     preload: function () {
-        this.game.load.image('background1', 'assets/graphics/green1.png');
-        this.game.load.image('background2', 'assets/graphics/green1.png');
-        this.game.load.image('background3', 'assets/graphics/sheetmetal.png');
         // Hi!
         // wEELLLLl heLLO theR
     },
@@ -124,7 +121,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         this.world.sendToBack(this.triangularDude);
         this.world.sendToBack(this.groups.hazards);
 
-        this.back=this.game.add.tileSprite(0,0,800,600,'background3');
+        this.back=this.game.add.tileSprite(0,0,800,600,'atlas','sheetmetal');
         this.world.sendToBack(this.back);
 
         this.B1=this.game.add.tileSprite(0,0,100,this.game.height,'atlas', 'metal-wall');

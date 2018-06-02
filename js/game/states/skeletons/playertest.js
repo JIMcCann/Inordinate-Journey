@@ -5,7 +5,6 @@ define(['game/keyDown', 'game/states/skeletons/portal',
     'util/functional', 'util/vectorMath'],
 function (keyDown, portal, fireball, ticktimer, F, VM) {return {
     preload: function () {
-        this.game.load.image('side1', 'assets/graphics/lavalside.png');
 		// Hi!
 		// wEELLLLl heLLO theR
     },
@@ -76,10 +75,10 @@ function (keyDown, portal, fireball, ticktimer, F, VM) {return {
             exampleplat = this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
                 Math.random()*400, i*75);
 
-        this.back1=this.game.add.tileSprite(-50,0,150,600,'side1');
+        this.back1=this.game.add.tileSprite(-50,0,150,600,'atlas','lavalside');
         this.world.sendToBack(this.back1);
 
-        this.back2=this.game.add.tileSprite(550,0,150,600,'side1');
+        this.back2=this.game.add.tileSprite(550,0,150,600,'atlas','lavalside');
         this.back2.scale.x *=-1;
         this.back2.tilePosition.y-=200;
         this.world.sendToBack(this.back2);
