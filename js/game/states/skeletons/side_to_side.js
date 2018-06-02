@@ -47,12 +47,13 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         }
         plat.scale.setTo(2);
         plat.anchor.setTo(0.5);
-        plat.body.velocity.y=100;
+        plat.body.velocity.y=300;
         plat.body.immovable = true;
         plat.angle=90;
         if (pos != 1) plat.angle = -plat.angle;
         plat.body.setSize(plat.height/plat.scale.y,plat.width/plat.scale.x);
         plat.animations.play('idle');
+        plat.swaptimeout = 80;
         //plat.body.checkCollision.top = false;
         plat.body.checkCollision.left = true;
         plat.body.checkCollision.right = true;

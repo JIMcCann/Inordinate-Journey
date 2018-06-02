@@ -1,8 +1,9 @@
 /*  game/states/skeletons/playertest
     A dumb test map with smiley geometry shapes */
 define(['game/keyDown', 'game/states/skeletons/portal',
-    'game/states/skeletons/fireball', 'util/functional', 'util/vectorMath'],
-function (keyDown, portal, fireball, F, VM) {return {
+    'game/states/skeletons/fireball', 'game/states/skeletons/ticktimer',
+    'util/functional', 'util/vectorMath'],
+function (keyDown, portal, fireball, ticktimer, F, VM) {return {
     preload: function () {
         this.game.load.image('side1', 'assets/graphics/lavalside.png');
 		// Hi!
@@ -20,6 +21,7 @@ function (keyDown, portal, fireball, F, VM) {return {
     },
     create: function () {
         this.game.audiosprite.play('bgm-lava');
+        this.addSkel(ticktimer);
         this.addSkel(fireball);
         this.portal = undefined;
 		// Positioning the player at the start of the level
@@ -54,13 +56,16 @@ function (keyDown, portal, fireball, F, VM) {return {
 
 		// Setting a timer that will randomly generate platforms
 		// starting from the top of the screen using 'spawnPlatform'
-		this.timer = this.game.time.create(false);
-		this.timer.loop(1300, function () {
-		    this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
+		// Updated this code to use ticktimer skeleton,
+		// as Phaser builtin timer used previously runs in real time
+		// and can therefore drop out of sync with gameplay in the event of lag
+		this.addTicktimerEvent(90, function (ticks) {
+		    let plat = this.spawnPlatform(
+		        'platform-' + (Math.floor(Math.random()*3) + 1),
 		        Math.random()*400, -100);
-		}, this);
-
-		this.timer.start();
+		    plat.body.velocity.y *= ticks/1500 + 1;
+		    return 0.992; // return value of ticktimer event = amount to multiply delay
+		});
 
 		// send solids group the back
         this.world.sendToBack(this.groups.solids);
@@ -85,10 +90,16 @@ function (keyDown, portal, fireball, F, VM) {return {
         let startplatform = this.spawnPlatform('platform-1',
             this.player.x - exampleplat.width/2,
             this.player.y + this.player.height/2);
-        this.portalTimeout = 1000;
+
+        this.addTicktimerEvent(2000, function () {
+            if (!this.portal) this.addSkel(portal);
+            this.portal.x = Math.random()*this.game.width;
+            this.portal.y = 0;
+            this.portal.body.velocity.y = 120;
+        });
     },
     update: function () {
-        if (Math.random() < 0.01) this.spawnFireball();
+        if (Math.random() < 0.004) this.spawnFireball().body.velocity.y *= 0.9;
 
 		//this.groups.solids.forEach(function(platform){platform.body.y += 1;});
 		// Using velocity for this to fix player bounce glitch
@@ -98,28 +109,18 @@ function (keyDown, portal, fireball, F, VM) {return {
 
 
         this.lavarock.tilePosition.y -= 2;
-
-        // Rotate gravity whenever space is held (assumes the player is loaded into the SSC)
+        /*
         if (keyDown('spacebar')) {
             let g = VM.rotate(this.player.body.gravity, 5);
             this.player.body.gravity.x = g.x;
             this.player.body.gravity.y = g.y;
-        }
+        }*/
         // Gooferino the triangle duderino
         this.triangleFlipTimeout--;
         if (this.triangleFlipTimeout == 0) {
             this.triangleFlipTimeout = 30;
             this.triangularDude.scale.x *= -1;
         }
-
-        this.portalTimeout--;
-        if (this.portalTimeout <= 0 && !this.portal) {
-            this.addSkel(portal);
-            this.portal.x = Math.random()*this.game.width;
-            this.portal.y = 0;
-            console.log(this.portal.x, this.portal.y);
-            this.portal.body.velocity.y = 12;
-        }// else if (this.portal) console.log(this.portal.x, this.portal.y);
 
         if (this.player.y > this.lava.y) this.playerDie(); // workaround for inexplicable harmless lava
     },

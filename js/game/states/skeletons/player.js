@@ -28,7 +28,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
         this.camera.follow(this.player); // camera should follow player
         this.playerStepTimer = 30; // 30 frames until next step noise
         this.playerWalkStrength = 30;
-        this.playerJumpStrength = 220;
+        this.playerJumpStrength = 240;
         this.playerMinRunSpeed = 210;
         this.playerFriction = 0.11;
         this.reldirs = {}; // Recalculate once per update loop
@@ -122,7 +122,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
         this.player.body.velocity.x += this.reldirs.up.x*this.playerJumpStrength;
         this.player.body.velocity.y += this.reldirs.up.y*this.playerJumpStrength;
         this.player.animations.play('jump');
-        this.game.audiosprite.play('jump', 0.35);
+        this.game.audiosprite.play('jump', 0.1);
     },
     playerDoWalk: function (vec) {
         this.player.body.velocity.x += vec.x*this.playerWalkStrength;
