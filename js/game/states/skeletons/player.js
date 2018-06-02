@@ -35,6 +35,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
         this.relspeeds = {};
         // Fix problem with rapidly switching animations
         this.timeSinceOnGround = 1;
+        this.turnOffLightLanding = false; // for annoying bippity boop glitch
     },
     playerUpdateBodySize: function () {
         this.player.body.setSize(16, 16,
@@ -183,7 +184,8 @@ function (game, keyDown, fadeOut, F, VM) {return {
         let hardness = this.relspeeds.down*VM.magnitude(this.player.body.velocity);
         if (hardness > 600)
             this.game.audiosprite.play('hard-land');
-        else if (hardness > 100) this.game.audiosprite.play('land', 0.6);
+        else if (hardness > 100 && !this.turnOffLightLanding)
+            this.game.audiosprite.play('land', 0.6);
         // avoid thok-thok-thok glitch by not making a sound at all if we landed really lightly
     },
     playerDoForceLanding: function () {

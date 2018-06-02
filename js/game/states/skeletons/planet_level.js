@@ -3,9 +3,10 @@ define(['game/keyDown', 'game/states/skeletons/portal', 'game/states/skeletons/s
     'util/functional', 'util/vectorMath'],
 function (keyDown, portal, spacebg, triangle, fireball, F, VM) {return {
     spawnPlanet: function () {
-        let planet = this.groups.solids.create(Math.random()*this.game.width, -100, 'atlas', 'asteroid');
+        let planet = this.groups.solids.create(Math.random()*this.game.width, -100, 'atlas', 'planet');
+        planet.tint = Math.floor(Math.random()*(0xf - 0x7))*0x111111 + 0x777777;
         planet.anchor.setTo(0.5, 0.5);
-        planet.scale.setTo(1 + Math.random()*4);
+        planet.scale.setTo(0.5 + Math.random()*4);
         planet.body.setCircle(planet.width/(2*planet.scale.x));
         planet.body.immovable = true;
         planet.body.velocity.y = (1 + Math.random())*100;
@@ -16,7 +17,7 @@ function (keyDown, portal, spacebg, triangle, fireball, F, VM) {return {
     create: function () {
         this.game.audiosprite.play('bgm-moon');
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
-
+        this.turnOffLightLanding = true; // avoid annoying glitch whenn player lands repeatedly
         this.addSkel(fireball);
         this.addSkel(spacebg);
         this.spacebgspeed = -7;
