@@ -1,9 +1,9 @@
 /*  game/states/skeletons/playertest
     A dumb test map with smiley geometry shapes */
 define(['game/keyDown', 'game/states/skeletons/portal', 'game/states/skeletons/spacebg',
-    'game/states/skeletons/triangle', 'game/states/skeletons/ticktimer',
+    'game/states/skeletons/triangle', 'game/states/skeletons/ticktimer', 'game/states/skeletons/flashingText',
     'util/functional', 'util/vectorMath'],
-function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
+function (keyDown, portal, spacebg, triangle, ticktimer, flashingText, F, VM) {return {
 	// Function that spawns a platform
 	spawnPlatform: function (name, x, y) {
 		// Create Solid Platform
@@ -34,6 +34,7 @@ function (keyDown, portal, spacebg, triangle, ticktimer, F, VM) {return {
 		// Add space background
         this.addSkel(spacebg);
         this.portal = undefined;
+        this.addSkel(flashingText0;
 		
 		// Place player in correct position
         this.player.x = this.game.width/2;
