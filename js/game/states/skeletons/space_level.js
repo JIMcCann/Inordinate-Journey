@@ -34,7 +34,7 @@ function (keyDown, portal, spacebg, triangle, ticktimer, flashingText, F, VM) {r
 		// Add space background
         this.addSkel(spacebg);
         this.portal = undefined;
-        this.addSkel(flashingText0;
+        this.addSkel(flashingText);
 		
 		// Place player in correct position
         this.player.x = this.game.width/2;
