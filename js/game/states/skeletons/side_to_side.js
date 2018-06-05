@@ -89,12 +89,12 @@ define(['game/keyDown',
         this.groups.hazards.enableBody = true;
         this.addSkel(ticktimer);
         this.addTicktimerEvent(2700, function () {
-            if (!this.portal) this.addSkel(portal);
+            this.addSkel(portal);
             this.portal.x = this.game.width/2;
             this.portal.y = 1 - this.portal.height;
             this.portal.body.velocity.y = 140;
         });
-        this.addTicktimerEvent(100, function () {
+        this.addTicktimerEvent(200, function () {
             this.spawnHaz();
             return 0.981;
         }, this);
