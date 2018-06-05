@@ -4,6 +4,7 @@
     Controls depend on direction of gravity.
     If there's no gravity, can move freely in any direction. */
 let DEBUG = false;
+let DEBUG_CHEATING = true;
 define(['game/game', 'game/keyDown', 'game/states/fadeOut', 'util/functional',
     'util/vectorMath'],
 function (game, keyDown, fadeOut, F, VM) {return {
@@ -258,6 +259,8 @@ function (game, keyDown, fadeOut, F, VM) {return {
         if (VM.magnitude(this.player.body.gravity) < 0.01)
             this.playerDoTopDownPhysics();
         else this.playerDoPlatformerPhysics();
+        if (DEBUG_CHEATING && keyDown('spacebar'))
+            this.game.levelOrder.nextLevel();
     },
     render: function () {
         if (DEBUG) this.game.debug.body(this.player);

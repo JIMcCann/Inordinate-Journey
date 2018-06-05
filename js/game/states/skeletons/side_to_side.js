@@ -1,6 +1,9 @@
 /*  game/states/skeletons/playertest
     A dumb test map with smiley geometry shapes */
-define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown, F, VM) {return {
+define(['game/keyDown',
+        'game/states/skeletons/portal',
+        'game/states/skeletons/ticktimer',
+        'util/functional', 'util/vectorMath'], function (keyDown, portal, ticktimer, F, VM) {return {
     preload: function () {
         // Hi!
         // wEELLLLl heLLO theR
@@ -33,29 +36,25 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         plat.body.checkCollision.right = true;
         return plat;
     },
-    /*spawnSpikes: function () {
-        let plat = this.groups.hazards.create(385, 0, 'atlas', 'tesla-1');
-        plat.animations.add('idle', [
-            'tesla-1', 'tesla-2', 'tesla-3', 'tesla-off', 'tesla-off', 'tesla-off'
-        ], 10, true);
+    spawnSpikes: function () {
+        let plat = this.groups.hazards.create(385, this.game.height, 'atlas', 'spikes');
         let pos = Math.ceil(Math.random()*2);
         if (pos == 1){
             plat.x=115;
         }
         plat.scale.setTo(2);
         plat.anchor.setTo(0.5);
-        plat.body.velocity.y=300;
+        plat.body.velocity.y=-120;
         plat.body.immovable = true;
         plat.angle=90;
         if (pos != 1) plat.angle = -plat.angle;
         plat.body.setSize(plat.height/plat.scale.y,plat.width/plat.scale.x);
-        plat.animations.play('idle');
         plat.swaptimeout = 80;
         //plat.body.checkCollision.top = false;
         plat.body.checkCollision.left = true;
         plat.body.checkCollision.right = true;
         return plat;
-    },*/
+    },
     spawnTesla: function () {
         let plat = this.groups.hazards.create(385, 0, 'atlas', 'tesla-1');
         plat.animations.add('idle', [
@@ -79,7 +78,7 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         return plat;
     },
     spawnHaz: function () {
-        let hazspawners = [this.spawnTesla, this.spawnSaw];
+        let hazspawners = [this.spawnTesla, this.spawnSaw, this.spawnSpikes];
         hazspawners[Math.floor(Math.random()*hazspawners.length)].call(this);
     },
     create: function () {
@@ -88,11 +87,17 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
         
         this.groups.hazards = this.add.group();
         this.groups.hazards.enableBody = true;
-        this.timer = this.game.time.create(false);
-        this.timer.loop(1000, function () {
+        this.addSkel(ticktimer);
+        this.addTicktimerEvent(2700, function () {
+            if (!this.portal) this.addSkel(portal);
+            this.portal.x = this.game.width/2;
+            this.portal.y = 1 - this.portal.height;
+            this.portal.body.velocity.y = 140;
+        });
+        this.addTicktimerEvent(100, function () {
             this.spawnHaz();
+            return 0.981;
         }, this);
-        this.timer.start();
         
         // Use arcade physics
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -146,13 +151,8 @@ define(['game/keyDown', 'util/functional', 'util/vectorMath'], function (keyDown
 
         this.B1.tilePosition.y -= 2;
         this.B2.tilePosition.y -= 2;
-        if (!keyDown('up') && !keyDown('down')){
+        if (this.playerOnGround()){
             this.player.y-=2;
-        }
-
-        if (keyDown('spacebar')) {
-            
-            console.log(this.player.x);
         }
         // Gooferino the triangle duderino
         this.triangleFlipTimeout--;
