@@ -6,7 +6,7 @@ function (keyDown, portal, spacebg, triangle, fireball, F, VM) {return {
         let planet = this.groups.solids.create(Math.random()*this.game.width, -100, 'atlas', 'planet');
         planet.tint = Math.floor(Math.random()*(0xf - 0x7))*0x111111 + 0x777777;
         planet.anchor.setTo(0.5, 0.5);
-        planet.scale.setTo(0.5 + Math.random()*4);
+        planet.scale.setTo(1 + Math.random()*3.5);
         planet.body.setCircle(planet.width/(2*planet.scale.x));
         planet.body.immovable = true;
         planet.body.velocity.y = (1 + Math.random())*100;
@@ -89,8 +89,8 @@ function (keyDown, portal, spacebg, triangle, fireball, F, VM) {return {
             fball.y = this.triangularDude.y;
             fball.scale.setTo(fball.scale.y*2/3);
             fball.body.velocity.setTo(
-                this.triangularDude.body.velocity.x*10,
-                this.triangularDude.body.velocity.y*10 - 100);
+                this.triangularDude.body.velocity.x*7,
+                this.triangularDude.body.velocity.y*7 - 100);
         }
         this.nearestMassiveStrategy();
         if (this.player.y > this.game.height + 300)
