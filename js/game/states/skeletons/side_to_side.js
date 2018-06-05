@@ -86,10 +86,11 @@ define(['game/keyDown',
         this.game.audiosprite.play('bgm-side-to-side');
         
         this.groups.hazards = this.add.group();
+        this.portal = undefined;
         this.groups.hazards.enableBody = true;
         this.addSkel(ticktimer);
         this.addTicktimerEvent(2700, function () {
-            this.addSkel(portal);
+            if (!this.portal) this.addSkel(portal);
             this.portal.x = this.game.width/2;
             this.portal.y = 1 - this.portal.height;
             this.portal.body.velocity.y = 140;
