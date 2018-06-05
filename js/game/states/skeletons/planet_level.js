@@ -23,7 +23,7 @@ function (keyDown, portal, spacebg, triangle, fireball, F, VM) {return {
         this.spacebgspeed = -7;
         this.addSkel(triangle);
         this.portal = undefined;
-        this.player.collideWorldBounds = true;
+        this.player.body.collideWorldBounds = true;
 
         this.game.stage.backgroundColor = '#666666';
 
