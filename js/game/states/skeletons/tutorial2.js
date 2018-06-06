@@ -1,12 +1,13 @@
 /*  game/states/skeletons/playertest
-    A dumb test map with smiley geometry shapes */
+    The first level. Takes place inside a volcano.
+    Platforms fall at increasing rate and speed while the lava below spews fireballs. */
 define(['game/keyDown',
         'game/states/skeletons/portal',
         'game/states/skeletons/ticktimer',
         'util/functional', 'util/vectorMath'], function (keyDown, portal, ticktimer, F, VM) {return {
 		create: function () {
         this.game.stage.backgroundColor='#4f4d4d';
-        this.game.audiosprite.play('bgm-side-to-side');
+        this.game.audiosprite.play('spacelava');
         
 		// Portal placement
         this.portal = undefined; // dont mind me, just preventing a bug

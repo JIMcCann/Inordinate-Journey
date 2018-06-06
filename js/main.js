@@ -6,6 +6,7 @@ requirejs(['game/states/functionCaller',
             'game/states/setup',
             'game/states/fixed/titleScreen',
             'game/states/skeletons/tutorial',
+            'game/states/skeletons/tutorial2',
             'game/states/skeletons/playertest',
             'game/states/skeletons/space_level',
             'game/states/skeletons/side_to_side',
@@ -13,7 +14,7 @@ requirejs(['game/states/functionCaller',
             'game/states/skeletons/rain_level',
             'game/LevelOrder'],
 function (functionCaller, setup, titleScreen,
-        tutorial, playertest, spaceLevel, sideToSide, planetLevel,
+        tutorial, tutorial2, playertest, spaceLevel, sideToSide, planetLevel,
         rainLevel,
         LevelOrder) {
     /*  Runs the preloader and then transitions to the state skeleton compositor.
@@ -21,6 +22,6 @@ function (functionCaller, setup, titleScreen,
         * the groups skeleton (which makes sure the state has a 'groups' property)
         * the player skeleton (which adds the player character)
         * the playertest skeleton (which adds the silly little test room) */
-    LevelOrder.order = [tutorial, playertest, spaceLevel, sideToSide, planetLevel, rainLevel];
+    LevelOrder.order = [tutorial, tutorial2, playertest, spaceLevel, sideToSide, planetLevel, rainLevel];
     setup('functionCaller', titleScreen);
 });
