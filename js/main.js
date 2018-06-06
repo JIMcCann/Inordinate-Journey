@@ -1,6 +1,5 @@
 /*  main
-    Not very useful yet.
-    Current condition: just loads a silly little test room. */
+    To be documented. */
 requirejs.config({baseUrl: './js'}); // Assume all module paths are relative to /js.
 requirejs(['game/states/functionCaller',
             'game/states/setup',
@@ -17,11 +16,9 @@ function (functionCaller, setup, titleScreen,
         tutorial, tutorial2, playertest, spaceLevel, sideToSide, planetLevel,
         rainLevel,
         LevelOrder) {
-    /*  Runs the preloader and then transitions to the state skeleton compositor.
-        The SSC will then make a state out of:
-        * the groups skeleton (which makes sure the state has a 'groups' property)
-        * the player skeleton (which adds the player character)
-        * the playertest skeleton (which adds the silly little test room) */
+    /*  Runs the preloader and then transitions to the function caller state.
+        The function caller state will call the titleScreen function,
+        which will transition to the title screen. */
     LevelOrder.order = [tutorial, tutorial2, playertest, spaceLevel, sideToSide, planetLevel, rainLevel];
     setup('functionCaller', titleScreen);
 });
