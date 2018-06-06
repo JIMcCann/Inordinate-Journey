@@ -91,7 +91,7 @@ function (keyDown, portal, fireball, ticktimer, F, VM) {return {
 			this.player.y + this.player.height/2);
 
 		// Spawn the portal every once in awhile (more than once in case we miss it the first time)
-		this.addTicktimerEvent(2000, function () {
+		this.addDisplayedTicktimerEvent('portal', 2000, function () {
 			if (!this.portal) this.addSkel(portal);
 			this.portal.x = Math.random()*this.game.width;
 			this.portal.y = 0;

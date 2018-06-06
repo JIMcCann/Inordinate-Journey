@@ -106,7 +106,7 @@ function (keyDown, portal, spacebg, triangle, ticktimer, flashingText, F, VM) {r
 		killZone.height = 50;
 
 		// Add event for portal to spawn
-		this.addTicktimerEvent(2500, function () {
+		this.addDisplayedTicktimerEvent('portal', 2500, function () {
 			if (!this.portal) this.addSkel(portal);
 			this.portal.x = Math.random()*this.game.width;
 			this.portal.y = this.game.height;

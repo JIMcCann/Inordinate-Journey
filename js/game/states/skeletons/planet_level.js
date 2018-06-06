@@ -5,8 +5,9 @@
 	slowly chases the player and shoots fireballs. */
 define(['game/keyDown', 'game/states/skeletons/portal', 'game/states/skeletons/spacebg',
 	'game/states/skeletons/triangle', 'game/states/skeletons/fireball',
+	'game/states/skeletons/ticktimer',
 	'util/functional', 'util/vectorMath'],
-function (keyDown, portal, spacebg, triangle, fireball, F, VM) {return {
+function (keyDown, portal, spacebg, triangle, fireball, ticktimer, F, VM) {return {
 	// spawnPlanet: Create a planet of random size and luminosity
 	spawnPlanet: function () {
 		let planet = this.groups.solids.create(Math.random()*this.game.width, -100, 'atlas', 'planet');
@@ -26,6 +27,7 @@ function (keyDown, portal, spacebg, triangle, fireball, F, VM) {return {
 		this.turnOffLightLanding = true; // avoid annoying glitch whenn player lands repeatedly
 		this.addSkel(fireball); // will need to spawn fireballs
 		this.addSkel(spacebg); // will need to have space background
+		this.addSkel(ticktimer); // will need to display portal timeout
 		this.spacebgspeed = -7; // it's fast
 		this.addSkel(triangle); // will need to have muscular hank
 		this.portal = undefined; // prevents SSC glitch
@@ -34,14 +36,17 @@ function (keyDown, portal, spacebg, triangle, fireball, F, VM) {return {
 
 		this.game.stage.backgroundColor = '#666666'; // never actually seen but a nice color anyway
 
-		// this level just uses a regular timer instead of a ticktimer
-		// because we don't need to speed up spawn rate or anything, it's already hard enough as it is
-		this.timer = this.game.time.create(false);
-		this.timer.loop(1000, this.spawnPlanet, this);
-		this.timer.start();
+		// spawn planets
+		this.addTicktimerEvent(60, function () {
+			this.spawnPlanet();
+		});
 
-		// the portal in this level ONLY APPEARS ONCE!
-		this.portalTimeout = 2500;
+		this.addDisplayedTicktimerEvent('portal', 1500, function () {
+			if (!this.portal) this.addSkel(portal);
+			this.portal.x = Math.random()*this.game.width;
+			this.portal.y = -50;
+			this.portal.body.velocity.y = 36;
+		});
 
 		this.playerJumpStrength /= 3; // adjust player jump strength for particular mechanics of this level
 		this.spawnPlanet().scale.setTo(5); // spawn a big starting planet
@@ -123,14 +128,5 @@ function (keyDown, portal, spacebg, triangle, fireball, F, VM) {return {
 		// (which is now an unusual occurrence because the player collides with world bounds)
 		if (this.player.y > this.game.height + 300)
 			this.playerDie();
-		// countdown until portal
-		this.portalTimeout--;
-		// add portal if appropriate based on countdown
-		if (this.portalTimeout <= 0 && !this.portal) {
-			this.addSkel(portal);
-			this.portal.x = Math.random()*this.game.width;
-			this.portal.y = -50;
-			this.portal.body.velocity.y = 36;
-		}
 	}
 };});

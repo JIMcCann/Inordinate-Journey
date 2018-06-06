@@ -8,12 +8,20 @@ define({
 	create: function () {
 		this.ticktimerTicks = 0; // no ticks yet
 		this.ticktimerEvents = []; // no events yet
+		this.displayedTicktimerEvents = {};
+		this.ticktimerText = this.add.text(20, 20, '', {
+			fontSize: 12, fill: '#ffffff'
+		});
 	},
 	addTicktimerEvent: function (freq, ev) {
 		// Every freq ticks, do ev
 		this.ticktimerEvents[this.ticktimerEvents.length] = {
 			frequency: freq, callback: ev
 		};
+	},
+	addDisplayedTicktimerEvent: function (name, freq, ev) {
+		this.displayedTicktimerEvents[name] = freq;
+		this.addTicktimerEvent(freq, ev);
 	},
 	update: function () {
 		this.ticktimerTicks++; // another tick has passed
@@ -30,5 +38,13 @@ define({
 				toKeep[toKeep.length] = e;
 		this.ticktimerEvents = toKeep; // replace current event queue with events not to get rid of
 			// (this gets rid of excluded events, of course)
+		// change text drawn based on events
+		let str = '';
+		for (let name in this.displayedTicktimerEvents) {
+			let freq = this.displayedTicktimerEvents[name];
+			str += 'Time until ' + name + ': ' +
+				Math.ceil((freq - this.ticktimerTicks%freq)/60) + '\n';
+		}
+		this.ticktimerText.text = str;
 	}
 });

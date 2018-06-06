@@ -83,7 +83,7 @@ define(['game/keyDown',
 
 		this.addSkel(ticktimer); // will need to schedule events whose frequency can change
 		// put a portal in the world once in awhile as a level exit
-		this.addTicktimerEvent(2700, function () {
+		this.addDisplayedTicktimerEvent('portal', 2700, function () {
 			if (!this.portal) this.addSkel(portal);
 			this.portal.x = this.game.width/2;
 			this.portal.y = 1 - this.portal.height;
