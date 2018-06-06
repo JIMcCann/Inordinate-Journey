@@ -1,17 +1,17 @@
 /*  game/LevelOrder
-    Keeps track of what level we're on and handles switching. */
+	Keeps track of what level we're on and handles switching. */
 define(['game/states/fadeOut',
-        'game/states/skeletons/groups', 'game/states/skeletons/player'],
+		'game/states/skeletons/groups', 'game/states/skeletons/player'],
 function (fadeOut, groupsSkel, playerSkel) {return {
-    order: [],
-    current: 0,
-    nextLevel: function () {
-        this.current += 1;
-        if (this.current >= this.order.length)
-            this.current = 0;
-        fadeOut('skelcomp', groupsSkel, playerSkel, this.order[this.current]);
-    }, restartLevel: function () {
-        this.current--;
-        this.nextLevel();
-    }
+	order: [],
+	current: 0,
+	nextLevel: function () {
+		this.current += 1;
+		if (this.current >= this.order.length)
+			this.current = 0;
+		fadeOut('skelcomp', groupsSkel, playerSkel, this.order[this.current]);
+	}, restartLevel: function () {
+		this.current--;
+		this.nextLevel();
+	}
 };});

@@ -1,32 +1,32 @@
 /*  Tutorial */
 define(['game/states/skeletons/portal', 'game/states/skeletons/ticktimer'], function (portal, ticktimer) {return {
 	spawnPlatform: function (name, x, y) {
-        let plat = this.groups.solids.create(x, y, 'atlas', name);
-        plat.scale.setTo(2);
-        plat.body.immovable = true;
-        plat.body.velocity.y = 60;
-        plat.body.checkCollision.down = false;
-        plat.body.checkCollision.left = false;
-        plat.body.checkCollision.right = false;
-        return plat;
-    },
+		let plat = this.groups.solids.create(x, y, 'atlas', name);
+		plat.scale.setTo(2);
+		plat.body.immovable = true;
+		plat.body.velocity.y = 60;
+		plat.body.checkCollision.down = false;
+		plat.body.checkCollision.left = false;
+		plat.body.checkCollision.right = false;
+		return plat;
+	},
 	createText: function (x, y, text, style){
 		let t = new Text(this.game, x, y, text, style);
 		return t;
 	},
-    preload: function () {
-        this.load.image('arrowkeys', 'assets/graphics/arrowkeys.png');
-    },
-    create: function () {
+	preload: function () {
+		this.load.image('arrowkeys', 'assets/graphics/arrowkeys.png');
+	},
+	create: function () {
 		// Set Background Color just in case
 		this.game.stage.backgroundColor = '#034b59';
 		// Start physics
-        this.game.physics.startSystem(Phaser.Physics.ARCADE);
+		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.player.body.collideWorldBounds=true;
 		
 		// Arrow Keys Image
 		this.arrowkeysImage = this.add.image(20, this.game.height-200, 'arrowkeys');
-        this.arrowkeysImage.scale.setTo(0.75);
+		this.arrowkeysImage.scale.setTo(0.75);
 		
 		// Text
 		let textStyle = {
@@ -57,20 +57,20 @@ define(['game/states/skeletons/portal', 'game/states/skeletons/ticktimer'], func
 		
 		// Timer event to spawn platforms
 		this.addTicktimerEvent(100, function (ticks) {
-		    let p = this.spawnPlatform(
-		        'platform-moon-' + (Math.floor(Math.random()*3) + 1),
-		        Math.random()*(this.game.width/2-100)+(this.game.width/2), 0);
-		    return 1;
+			let p = this.spawnPlatform(
+				'platform-moon-' + (Math.floor(Math.random()*3) + 1),
+				Math.random()*(this.game.width/2-100)+(this.game.width/2), 0);
+			return 1;
 		});
-        
-        this.addSkel(portal);
-        this.portal.x = this.game.width-50;
-        this.portal.y = 50;
-    },
-    update: function () {
-        let STATE = this;
-        this.game.physics.arcade.collide(this.player, this.solidLayer, function () {
-            STATE.playerDoLandFromFall();
-        });
-    }
+		
+		this.addSkel(portal);
+		this.portal.x = this.game.width-50;
+		this.portal.y = 50;
+	},
+	update: function () {
+		let STATE = this;
+		this.game.physics.arcade.collide(this.player, this.solidLayer, function () {
+			STATE.playerDoLandFromFall();
+		});
+	}
 };});

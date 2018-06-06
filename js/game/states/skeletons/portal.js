@@ -4,7 +4,7 @@
 let PORTALDEBUG = false;
 define([],
 function () {return {
-    create: function () {
+	create: function () {
 		this.portal = this.add.sprite(100, 0, 'atlas', 'portal-1');
 		this.portal.scale.setTo(2, 2);
 		this.portal.anchor.setTo(0.5, 0.5);
@@ -13,16 +13,16 @@ function () {return {
 		this.portal.animations.play('idle');
 
 		this.physics.arcade.enable(this.portal);
-    },
-    update: function () {
-        let STATE = this;
-        if(this.player){
+	},
+	update: function () {
+		let STATE = this;
+		if(this.player){
 			this.game.physics.arcade.collide(this.player, this.portal,
 				function () {
 					STATE.game.levelOrder.nextLevel();
 				});
-        }
-    },
+		}
+	},
 	render: function() {
 		if (PORTALDEBUG) this.game.debug.body(this.player);
 	}
