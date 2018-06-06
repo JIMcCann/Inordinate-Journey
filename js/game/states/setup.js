@@ -21,15 +21,24 @@ define(['game/assetPath', 'game/game', 'game/LevelOrder', 'util/functional'], fu
 				assetPath + '/graphics/atlas.json',
 				Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
 			// had this removed game.load.image('tileset', assetPath + '/graphics/tileset.png'); // load the tileset
-			game.load.audioSprite('audiosprite', // load the audiosprite
-				[assetPath + '/audio/audiosprite.mp3',
-				 assetPath + '/audio/audiosprite.ogg',
-				 assetPath + '/audio/audiosprite.m4a',
-				 assetPath + '/audio/audiosprite.ac3'],
-				assetPath + '/audio/audiosprite.json');
+			try {
+				game.load.audioSprite('audiosprite', // load the audiosprite
+					[assetPath + '/audio/audiosprite.mp3',
+					 assetPath + '/audio/audiosprite.ogg',
+					 assetPath + '/audio/audiosprite.m4a',
+					 assetPath + '/audio/audiosprite.ac3'],
+					 assetPath + '/audio/audiosprite.json');
+			} catch (e) {}
 		},
 		create: function () {
-			game.audiosprite = game.make.audioSprite('audiosprite');
+			try {
+				game.audiosprite = game.make.audioSprite('audiosprite');
+			} catch (e) {
+				game.audiosprite = {
+					play: function () {},
+					stop: function () {}
+				};
+			}
 		},
 		update: function () {
 			// as soon as the preload and create phases are done, jump to the next state
