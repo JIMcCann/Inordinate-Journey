@@ -15,9 +15,6 @@ define(['game/states/skeletons/portal', 'game/states/skeletons/ticktimer'], func
 		let t = new Text(this.game, x, y, text, style);
 		return t;
 	},
-	preload: function () {
-		this.load.image('arrowkeys', 'assets/graphics/arrowkeys.png');
-	},
 	create: function () {
 		// Set Background Color just in case
 		this.game.stage.backgroundColor = '#034b59';
@@ -26,7 +23,7 @@ define(['game/states/skeletons/portal', 'game/states/skeletons/ticktimer'], func
 		this.player.body.collideWorldBounds=true;
 
 		// Arrow Keys Image
-		this.arrowkeysImage = this.add.image(20, this.game.height-200, 'arrowkeys');
+		this.arrowkeysImage = this.add.image(20, this.game.height-200, 'atlas', 'arrowkeys');
 		this.arrowkeysImage.scale.setTo(0.75);
 
 		// Text
@@ -34,7 +31,7 @@ define(['game/states/skeletons/portal', 'game/states/skeletons/ticktimer'], func
 			font: "16px Arial",
 			fill: "#FFFFFF"
 		};
-		this.textMovement = this.game.add.text(100,this.game.height-196, 
+		this.textMovement = this.game.add.text(100,this.game.height-196,
 			"Use Arrow Keys\nto Move / Jump", textStyle);
 		this.textPortal = this.game.add.text(35, 20,
 			"Jump through the Portal\nto get to the next stage!", textStyle);

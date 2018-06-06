@@ -6,7 +6,7 @@
 define(['game/keyDown', 'game/states/skeletons/portal', 'util/functional', 'util/vectorMath'],
 function (keyDown, portal, F, VM) {return {
 	spawnPlatform: function (x, y) {
-		let plat = this.groups.solids.create(x, y, 'atlas', 'platform-1');
+		let plat = this.groups.solids.create(x, y, 'atlas', 'snowplatform');
 		// the platforms scroll left
 		plat.update = function(){
 			plat.x -= 2;
@@ -20,7 +20,7 @@ function (keyDown, portal, F, VM) {return {
 	},
 	spawnProjectile: function (x, y) {
 		// the asteroids are deadly
-		let projectile = this.groups.hazards.create(x, y, 'atlas', 'asteroid');
+		let projectile = this.groups.hazards.create(x, y, 'atlas', 'snowballs');
 		projectile.scale.setTo(2);
 		projectile.body.setCircle(5, 6, 6);
 		projectile.body.immovable = true;
@@ -41,7 +41,7 @@ function (keyDown, portal, F, VM) {return {
 		this.game.stage.backgroundColor = "#facade";
 
 		// Create ground
-		this.ground = this.game.add.tileSprite(0,this.game.height-100, this.game.width, 100, 'atlas', 'moon');
+		this.ground = this.game.add.tileSprite(0,this.game.height-100, this.game.width, 100, 'atlas', 'snow');
 		this.groups.solids.add(this.ground);
 		this.ground.body.immovable = true;
 
