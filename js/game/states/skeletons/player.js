@@ -4,7 +4,7 @@
 	Controls depend on direction of gravity.
 	If there's no gravity, can move freely in any direction. */
 let DEBUG = false;
-let DEBUG_CHEATING = true;
+let DEBUG_CHEATING = true; // if we can cheat, we can press Space to advance levels
 define(['game/game', 'game/keyDown', 'game/states/fadeOut', 'util/functional',
 	'util/vectorMath'],
 function (game, keyDown, fadeOut, F, VM) {return {
@@ -16,7 +16,8 @@ function (game, keyDown, fadeOut, F, VM) {return {
 		this.player.animations.add('walk', [
 			'guy-walk-1', 'guy-walk-2', 'guy-walk-3',
 			'guy-walk-4', 'guy-walk-5', 'guy-walk-6'], 20, true);
-		this.player.animations.add('jump', ['guy-jump-4', 'guy-jump-5', 'guy-jump-6', 'guy-jump-7', 'guy-jump-8'], 10);
+		this.player.animations.add('jump',
+			['guy-jump-4', 'guy-jump-5', 'guy-jump-6', 'guy-jump-7', 'guy-jump-8'], 10);
 		this.player.animations.add('fall', ['guy-jump-9'], 10);
 		this.player.animations.add('run', ['guy-run-1', 'guy-run-2', 'guy-run-3', 'guy-run-4',
 			'guy-run-5', 'guy-run-6'], 10, true);
@@ -39,6 +40,8 @@ function (game, keyDown, fadeOut, F, VM) {return {
 		this.turnOffLightLanding = false; // for annoying bippity boop glitch
 	},
 	playerUpdateBodySize: function () {
+		// Change the size and position of the collision body to remain consistent
+		// even when animations change
 		this.player.body.setSize(16, 16,
 			this.player.width/(2*this.player.scale.x) - 8,
 			this.player.height/(2*this.player.scale.y) - 8);
@@ -54,22 +57,19 @@ function (game, keyDown, fadeOut, F, VM) {return {
 			}
 		}
 	},
-	playerCheckGoal: function () {
-//        if (this.player.y < 50 && this.player.animations.name == 'jump') {
-			// This is a temporary win condition for levels and will be changed later.
-	//        game.levelOrder.nextLevel();
-  //      }
-	},
 	playerCollideSolids: function () {
 		// If any sprites / etc declare themselves solid by being in the 'solids' group:
 		if (this.groups.solids) {
 			this.game.physics.arcade.collide(this.player, this.groups.solids); // then treat them as solid
 			this.game.physics.arcade.overlap(this.player, this.groups.solids, function (player, solid) {
+				// Check if there are any passable sides
 				let anySidePassable = false;
 				for (let k of ['up', 'down', 'left', 'right']) if (!solid.body.checkCollision[k]) {
 					anySidePassable = true; break;
 				}
+				// If there aren't , then the solid thing ought to be solid on the inside too
 				if (!anySidePassable) {
+					// so push the player out of it
 					let centerOf = function (obj) {
 						return VM.vector(obj.x + obj.width/2, obj.y + obj.height/2);
 					}
@@ -82,6 +82,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
 		}
 	},
 	playerDie: function () {
+		// Stop audio and reset state
 		this.game.audiosprite.stop();
 		F.curry(fadeOut, this.state.current).apply(null, this.initargs);
 	},
@@ -109,9 +110,12 @@ function (game, keyDown, fadeOut, F, VM) {return {
 			this.relspeeds[d] =
 				VM.scalarProject(this.player.body.velocity, this.reldirs[d]);
 	},
+	// playerStanding: True if the current animation is a grounded animation
 	playerStanding: function () {
 		return ['idle', 'walk', 'run'].includes(this.player.animations.name);
 	},
+	// playerOnGround: True if the player is (or was very recently) actually physically grounded
+	// The "or was very recently" is a workaround for faulty collision detection
 	playerOnGround: function () {
 		let m = (this.player.body.blocked[VM.direction(this.reldirs.down)] ||
 				 this.player.body.touching[VM.direction(this.reldirs.down)]) &&
@@ -120,24 +124,37 @@ function (game, keyDown, fadeOut, F, VM) {return {
 		else this.timeSinceOnGround++;
 		return this.timeSinceOnGround < 20 && this.player.animations.name != 'jump';
 	},
+	// playerDoJump: Execute a jump. Calling this method will result in a jump
+	// even if the player should not be able to do one. Therefore, it can be used
+	// to force a jump, e.g. during a scripted event or as a special ability.
 	playerDoJump: function () {
+		// go "up" (relative to gravity)
 		this.player.body.velocity.x += this.reldirs.up.x*this.playerJumpStrength;
 		this.player.body.velocity.y += this.reldirs.up.y*this.playerJumpStrength;
+		// play jump anim and sound
 		this.player.animations.play('jump');
 		this.game.audiosprite.play('jump', 0.1);
 	},
+	// playerDoWalk: Execute walking logic and animation.
 	playerDoWalk: function (vec) {
+		// move along the vector given
 		this.player.body.velocity.x += vec.x*this.playerWalkStrength;
 		this.player.body.velocity.y += vec.y*this.playerWalkStrength;
+		// play walking animation if standing
 		if (this.player.animations.name == 'idle') this.player.animations.play('walk');
 	},
+	// playerDoCheckRun: Transition from walking to running based on speed.
 	playerDoCheckRun: function () {
+		// get walking speed
 		let walkspd = Math.abs(VM.magnitude(this.player.body.velocity)*this.relspeeds.right);
+		// run if going fast enough and walking
 		if (this.player.animations.name == 'walk' && walkspd > this.playerMinRunSpeed)
 			this.player.animations.play('run');
+		// walk if going slow enough and running
 		else if (this.player.animations.name == 'run' && walkspd < this.playerMinRunSpeed)
 			this.player.animations.play('walk');
 	},
+	// playerDoFallFromLedges: Check and process cartoony "road runner" situations involving missing ground.
 	playerDoFallFromLedges: function () {
 		if (this.playerStanding() // If we're standing or walking
 				&& !this.playerOnGround()) { // but not on anything
@@ -145,14 +162,16 @@ function (game, keyDown, fadeOut, F, VM) {return {
 			if (DEBUG) console.log('fall off ledge');
 		}
 	},
+	// playerRespondWalk: Execute walking logic and animation, but only if appropriate based on input.
 	playerRespondWalk: function () {
-		let tryingToWalk = false;
+		let tryingToWalk = false; // cehck if trying to walk
 		for (let vec of [this.reldirs.left, this.reldirs.right]) if (keyDown(VM.direction(vec))) { // If we are:
 			tryingToWalk = !tryingToWalk; // Record it (this will be important later)
 			this.playerDoWalk(vec); // do it
 		}
 		return tryingToWalk;
 	},
+	// playerRespondJump: Execute a jump, but only if appropriate based on input and current player state.
 	playerRespondJump: function () {
 		if (keyDown(VM.direction(this.reldirs.up)) // If we're trying to jump
 				&& this.playerStanding()) { // from standing or walking:
@@ -161,19 +180,24 @@ function (game, keyDown, fadeOut, F, VM) {return {
 		}
 		return false;
 	},
+	// playerRotateByGravity: Rotate player sprite so that down is the direction of gravity.
 	playerRotateByGravity: function () {
 		this.player.angle = VM.angle(this.player.body.gravity) - 90; // Rotate sprite according to gravity
 	},
+	// playerFaceLeft: Flip sprite to the left.
 	playerFaceLeft: function () {
 		this.player.scale.x = -Math.abs(this.player.scale.x);
 	},
+	// same but to right
 	playerFaceRight: function () {
 		this.player.scale.x = Math.abs(this.player.scale.x);
 	},
+	// playerDoUpdatePlatformFacing: Logically control flipping when using platforming logic.
 	playerDoUpdatePlatformerFacing: function () {
 		if (this.relspeeds.left > 0) this.playerFaceLeft();
 		else this.playerFaceRight();
 	},
+	// playerDoFallFromJumping: Change jumping animation to falling animation based on trajectory.
 	playerDoFallFromJumping: function () {
 		if (this.player.animations.name == 'jump' // If we're jumping
 				&& this.relspeeds.down > 0) { // but headed downward
@@ -181,6 +205,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
 			if (DEBUG) console.log('fall from jump');
 		}
 	},
+	// playerPlayLandingSound: Play a different sound depending on how hard we landed
 	playerPlayLandingSound: function () {
 		let hardness = this.relspeeds.down*VM.magnitude(this.player.body.velocity);
 		if (hardness > 600)
@@ -189,10 +214,13 @@ function (game, keyDown, fadeOut, F, VM) {return {
 			this.game.audiosprite.play('land', 0.6);
 		// avoid thok-thok-thok glitch by not making a sound at all if we landed really lightly
 	},
+	// playerDoForceLanding: The player is now "grounded" and eligible to walk and jump,
+	// even if this physically should not be the case.
 	playerDoForceLanding: function () {
 		this.player.animations.play('walk');
 		this.playerPlayLandingSound();
 	},
+	// playerDoLandFromFall: The player is now grounded but only if we landed on smething
 	playerDoLandFromFall: function () {
 		if (['fall', 'jump'].includes(this.player.animations.name) // If we're falling
 				&& this.playerOnGround()) { // but just landed
@@ -200,10 +228,12 @@ function (game, keyDown, fadeOut, F, VM) {return {
 			this.playerDoForceLanding();
 		}
 	},
+	// playerDoStandStillFromWalk: Stop walking
 	playerDoStandStillFromWalk: function () {
 		if (this.player.animations.name == 'walk')
 			this.player.animations.play('idle');
 	},
+	// playerDoApplyFriction: Slow down (but not "vertically" (relative to gravity))
 	playerDoApplyFriction: function () {
 		// Calculate the vector difference between our velocity
 		// and (friction)% of our projected velocity along the walking axis
@@ -213,6 +243,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
 		this.player.body.velocity.x = v.x;
 		this.player.body.velocity.y = v.y;
 	},
+	// playerDoPlatformPhysics: Culmination of above logics to simulate platform environment.
 	playerDoPlatformerPhysics: function () {
 		this.playerPlayStepSounds();
 		this.playerRotateByGravity();
@@ -225,8 +256,8 @@ function (game, keyDown, fadeOut, F, VM) {return {
 		if (!tryingToWalk) this.playerDoStandStillFromWalk();
 		this.playerDoApplyFriction();
 		this.playerDoCheckRun();
-		this.playerCheckGoal();
 	},
+	// playerDoTopDownPhysics: Alternative physics never used in game.
 	playerDoTopDownPhysics: function () {
 		this.player.angle = 0; // In the absence of gravity, we should always be on our feet
 		let anyKeyDown = false;
@@ -251,14 +282,19 @@ function (game, keyDown, fadeOut, F, VM) {return {
 		}
 	},
 	update: function () {
+		// keep consistent bounding box
 		this.playerUpdateBodySize();
+		// determine directions relative to gravity
 		this.playerRecalculateReldirs();
 		if (DEBUG) console.log(VM.magnitude(this.player.body.velocity));
+		// handle collisions
 		this.playerCollideSolids();
 		this.playerCollideHazards();
+		// which physics is used depends on whether there's a significant amount of gravity in effect
 		if (VM.magnitude(this.player.body.gravity) < 0.01)
 			this.playerDoTopDownPhysics();
 		else this.playerDoPlatformerPhysics();
+		// allow cheating if appropriate (e.g for testing)
 		if (DEBUG_CHEATING && keyDown('spacebar'))
 			this.game.levelOrder.nextLevel();
 	},

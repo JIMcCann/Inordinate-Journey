@@ -20,7 +20,6 @@ define(['game/assetPath', 'game/game', 'game/LevelOrder', 'util/functional'], fu
 				assetPath + '/graphics/atlas.png',
 				assetPath + '/graphics/atlas.json',
 				Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
-			// had this removed game.load.image('tileset', assetPath + '/graphics/tileset.png'); // load the tileset
 			try {
 				game.load.audioSprite('audiosprite', // load the audiosprite
 					[assetPath + '/audio/audiosprite.mp3',
@@ -28,13 +27,13 @@ define(['game/assetPath', 'game/game', 'game/LevelOrder', 'util/functional'], fu
 					 assetPath + '/audio/audiosprite.m4a',
 					 assetPath + '/audio/audiosprite.ac3'],
 					 assetPath + '/audio/audiosprite.json');
-			} catch (e) {}
+			} catch (e) {} // don't worry if there's no audiosprite
 		},
 		create: function () {
 			try {
-				game.audiosprite = game.make.audioSprite('audiosprite');
+				game.audiosprite = game.make.audioSprite('audiosprite'); // try to make audiosprite object
 			} catch (e) {
-				game.audiosprite = {
+				game.audiosprite = { // if there is none, create a dummy to avoid errors
 					play: function () {},
 					stop: function () {}
 				};

@@ -5,7 +5,8 @@ define(['game/game', 'util/functional'], function (game, F) {
 		eachSkel: function (k, args) {
 			let retval = [];
 			for (let skel of this.skels) if (skel[k] && !skel.SKC_DONE_FUNCS[k]) {
-				// For each skeleton that supports the method:
+				// For each skeleton that supports the method,
+				// so long as it isn't a "run once" method or hasn't been run on this skeleton yet if it is:
 				let r = skel[k].apply(this, args); // Call it
 				if (r != undefined) retval[retval.length] = r; // Add it to return value if it returned anything
 			}
@@ -44,7 +45,7 @@ define(['game/game', 'util/functional'], function (game, F) {
 				}
 
 				// once we've figured out what the skeleton is,
-				skel.SKC_DONE_FUNCS = {};
+				skel.SKC_DONE_FUNCS = {}; // put a marker on it to store function names that shouldn't be called,
 				this.skels[this.skels.length] = skel; // add it to what skeletons we have
 				skelinitps[skelinitps.length] = thisskelinitps; // and add the init parameters
 			}

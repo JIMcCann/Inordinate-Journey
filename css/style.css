@@ -1,7 +1,7 @@
 body {
-    background-color: black;
+	background-color: black;
 }
 canvas {
-    /* center the canvas */
-    margin: 0 auto;
+	/* center the canvas */
+	margin: 0 auto;
 }

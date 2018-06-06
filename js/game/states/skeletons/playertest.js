@@ -1,5 +1,8 @@
 /*  game/states/skeletons/playertest
-	A dumb test map with smiley geometry shapes */
+	So named because it was originally a test room.
+	It's no longer a test room. It's now the first level.
+	It takes place inside a volcano.
+	Platforms fall from above and into the lava below, which periodically spews fireballs. */
 define(['game/keyDown', 'game/states/skeletons/portal',
 	'game/states/skeletons/fireball', 'game/states/skeletons/ticktimer',
 	'util/functional', 'util/vectorMath'],
@@ -9,20 +12,23 @@ function (keyDown, portal, fireball, ticktimer, F, VM) {return {
 		// wEELLLLl heLLO theR
 	},
 	spawnPlatform: function (name, x, y) {
+		// add a platform
 		let plat = this.groups.solids.create(x, y, 'atlas', name);
-		plat.scale.setTo(2);
+		plat.scale.setTo(2); // make it big to compensate for tiny
 		plat.body.immovable = true;
-		plat.body.velocity.y = 60;
+		plat.body.velocity.y = 60; // fall it
+		// we can jump up through it
 		plat.body.checkCollision.down = false;
 		plat.body.checkCollision.left = false;
 		plat.body.checkCollision.right = false;
 		return plat;
 	},
 	create: function () {
-		this.game.audiosprite.play('bgm-lava');
-		this.addSkel(ticktimer);
-		this.addSkel(fireball);
-		this.portal = undefined;
+		this.game.audiosprite.play('bgm-lava'); //m usic please
+		this.addSkel(ticktimer); // will need specialized timer to schedule events whose frequency can change
+		this.addSkel(fireball); // will need to be able to spawn fireballs
+		this.portal = undefined; // SSC glitch workaround
+
 		// Positioning the player at the start of the level
 		this.player.x = this.game.width/2;
 		this.player.y = 2*this.game.height/3;
@@ -30,17 +36,6 @@ function (keyDown, portal, fireball, ticktimer, F, VM) {return {
 
 		// Use arcade physics
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
-
-		// Play audio
-//        this.game.audiosprite.play('spacelava');
-
-		// Create 'solids' group
-		this.groups.solids = this.add.group();
-		this.groups.solids.enableBody = true;
-
-		// Create 'hazards' group
-		this.groups.hazards = this.add.group();
-		this.groups.hazards.enableBody = true;
 
 		// Create Lava
 		this.lava = this.groups.hazards.create(0, 550, 'atlas', 'lava-1');
@@ -66,30 +61,36 @@ function (keyDown, portal, fireball, ticktimer, F, VM) {return {
 			return 0.992; // return value of ticktimer event = amount to multiply delay
 		});
 
-		// send solids group the back
+		// now the platforms will properly appear to fall into the lava
 		this.world.sendToBack(this.groups.solids);
 
-		// Generate initial platform
+		// Put platforms into the level at periodic vertical positions
+		// to give the impression they've already begun falling,
+		// as well as to give the player something to climb
 		let exampleplat = null;
 		for(let i = -1; i<10; i++)
 			exampleplat = this.spawnPlatform('platform-' + (Math.floor(Math.random()*3) + 1),
 				Math.random()*400, i*75);
 
+		// Add spoopy volcano stone walls
 		this.back1=this.game.add.tileSprite(-50,0,150,600,'atlas','lavalside');
 		this.world.sendToBack(this.back1);
-
 		this.back2=this.game.add.tileSprite(550,0,150,600,'atlas','lavalside');
 		this.back2.scale.x *=-1;
 		this.back2.tilePosition.y-=200;
 		this.world.sendToBack(this.back2);
 
-
+		// Add back wall to function as background
 		this.lavarock = this.game.add.tileSprite(0,0,500,600,'atlas', 'volcano-wall');
 		this.world.sendToBack(this.lavarock);
+
+		// Give the player a platform to stand on to begin with
+		// so they don't immediately fall into the lava
 		let startplatform = this.spawnPlatform('platform-1',
 			this.player.x - exampleplat.width/2,
 			this.player.y + this.player.height/2);
 
+		// Spawn the portal every once in awhile (more than once in case we miss it the first time)
 		this.addTicktimerEvent(2000, function () {
 			if (!this.portal) this.addSkel(portal);
 			this.portal.x = Math.random()*this.game.width;
@@ -98,22 +99,13 @@ function (keyDown, portal, fireball, ticktimer, F, VM) {return {
 		});
 	},
 	update: function () {
-		if (Math.random() < 0.004) this.spawnFireball().body.velocity.y *= 0.9;
+		if (Math.random() < 0.004) this.spawnFireball().body.velocity.y *= 0.9; // chance to spew fire
 
-		//this.groups.solids.forEach(function(platform){platform.body.y += 1;});
-		// Using velocity for this to fix player bounce glitch
-
+		// scroll backgrounds
 		this.back1.tilePosition.y +=1;
 		this.back2.tilePosition.y +=1;
-
-
 		this.lavarock.tilePosition.y -= 2;
-		/*
-		if (keyDown('spacebar')) {
-			let g = VM.rotate(this.player.body.gravity, 5);
-			this.player.body.gravity.x = g.x;
-			this.player.body.gravity.y = g.y;
-		}*/
+
 		// Gooferino the triangle duderino
 		this.triangleFlipTimeout--;
 		if (this.triangleFlipTimeout == 0) {
@@ -121,9 +113,5 @@ function (keyDown, portal, fireball, ticktimer, F, VM) {return {
 			this.triangularDude.scale.x *= -1;
 		}
 
-		if (this.player.y > this.lava.y) this.playerDie(); // workaround for inexplicable harmless lava
 	},
-  //  render: function () {
-//        this.game.debug.body(this.lava);
-	//}
 };});

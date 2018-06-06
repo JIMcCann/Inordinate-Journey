@@ -3,21 +3,6 @@
 Hi. We're Team Triangle.
 Welcome to our class project for UCSC CMPM/ARTG 120 Spring 2018.
 
-## YO TEAM TRIANGLE READ THIs
-
-Concio, Bryan, remember you guys! The audio files were too big
-to fit on the repo and keep it small enough to download efficiently,
-so we relocated them.
-
-So, whenever you clone or download the repo fresh from scratch,
-you'll have to get all the audio files from
-[this Google Drive folder](https://drive.google.com/drive/folders/1DchB7iDGFa6uyhD2mwipnPnNXuualeTm).
-For them to work properly, you'll want to put all five files in **/assets/audio**.
-
-IF YOU DON'T DOWNLOAD THE AUDIOSPRITE FILES, THE GAME WILL NOT RUN.
-I'm going to work on a fix for this, so that even if you forget this stuff,
-you can still test or edit the game.
-
 ## Important license info
 
 Before using any of our code, please take a look at LICENSE.md.
@@ -27,14 +12,19 @@ and a university class project is one of them.
 We take our education seriously,
 and plagiarism is a threat to the integrity of our work.
 
-## Installation
+## How to install and run
 
-Don't install this software. It doesn't work.
-
-This section to be updated when the software does actually work.
+You will need server software and a fairly recent web browser.
+Extract the repository to anywhere.
+Optional: for audio, download all the files from
+[this Google Drive folder](https://drive.google.com/drive/folders/1DchB7iDGFa6uyhD2mwipnPnNXuualeTm)
+and put them in (repository root)/assets/audio.
+Finally, start the server, point the browser to the server,
+and navigate in-browser to the root directory of the extracted repository.
 
 ## How to play
 
-There's nothing to play.
-
-This section to be updated when the project is finished.
+Use the arrowkeys to move and jump.
+Input interpretation depends on direction of gravity, which sometimes changes.
+Avoid things that look painful, survive until the shining purple rift in spacetime appears,
+and use it to reach the next level.

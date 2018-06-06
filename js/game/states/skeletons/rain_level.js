@@ -1,7 +1,13 @@
+/*	game/states/skeletons/rain_level
+	Actually a snow level
+	When we have the proper assets for this level, it will be a snow themed
+	denouement to the game, in which the player must simply run along a field of snow scrolling left
+	while dodging falling snowballs */
 define(['game/keyDown', 'game/states/skeletons/portal', 'util/functional', 'util/vectorMath'],
 function (keyDown, portal, F, VM) {return {
 	spawnPlatform: function (x, y) {
 		let plat = this.groups.solids.create(x, y, 'atlas', 'platform-1');
+		// the platforms scroll left
 		plat.update = function(){
 			plat.x -= 2;
 		}
@@ -13,6 +19,7 @@ function (keyDown, portal, F, VM) {return {
 		return plat;
 	},
 	spawnProjectile: function (x, y) {
+		// the asteroids are deadly
 		let projectile = this.groups.hazards.create(x, y, 'atlas', 'asteroid');
 		projectile.scale.setTo(2);
 		projectile.body.setCircle(5, 6, 6);
@@ -22,7 +29,7 @@ function (keyDown, portal, F, VM) {return {
 		return projectile;
 	},
 	create: function () {
-		this.portal = undefined;
+		this.portal = undefined; // SSC glitch workaround
 		// Positioning the player at the start of the level
 		this.player.x = this.game.width/4;
 		this.player.y = this.game.height-150;
@@ -33,22 +40,11 @@ function (keyDown, portal, F, VM) {return {
 		// Background Color
 		this.game.stage.backgroundColor = "#facade";
 
-		// Play audio
-		//this.game.audiosprite.play('spacelava');
-
-		// Create 'solids' group
-		this.groups.solids = this.add.group();
-		this.groups.solids.enableBody = true;
-
-		// Create 'hazards' group
-		this.groups.hazards = this.add.group();
-		this.groups.hazards.enableBody = true;
-				
 		// Create ground
 		this.ground = this.game.add.tileSprite(0,this.game.height-100, this.game.width, 100, 'atlas', 'moon');
 		this.groups.solids.add(this.ground);
 		this.ground.body.immovable = true;
-		
+
 		this.world.bringToTop(this.groups.hazards);
 		this.world.bringToTop(this.ground);
 
@@ -60,7 +56,7 @@ function (keyDown, portal, F, VM) {return {
 		}, this);
 		this.projTimer.start();
 		this.portalTimeout = 1000;
-		
+
 		// Setting a timer that will randomly generate platforms
 		// starting from the top of the screen using 'spawnPlatform'
 		this.platTimer = this.game.time.create(false);
@@ -72,14 +68,16 @@ function (keyDown, portal, F, VM) {return {
 	update: function () {
 		let speed = 2;
 		this.ground.tilePosition.x -= speed;
-		if(!keyDown('left') && !keyDown('right'))this.player.x -= speed;
+		// the player scrolls with the ground when standing on it
+		if(this.playerOnGround()) this.player.x -= speed;
 
+		// add a portal on a schedule
 		this.portalTimeout--;
 		if (this.portalTimeout <= 0 && !this.portal) {
 			this.addSkel(portal);
 			this.portal.x = this.game.width+10;
 			this.portal.y = this.game.height-150;
-			console.log(this.portal.x, this.portal.y);
+			//console.log(this.portal.x, this.portal.y);
 			this.portal.body.velocity.x = -12;
 		}
 	},
