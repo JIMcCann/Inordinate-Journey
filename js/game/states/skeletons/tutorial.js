@@ -23,8 +23,9 @@ define(['game/states/skeletons/portal', 'game/states/skeletons/ticktimer'], func
 		this.player.body.collideWorldBounds=true;
 
 		// Arrow Keys Image
-		this.arrowkeysImage = this.add.image(20, this.game.height-200, 'atlas', 'arrowkeys');
-		this.arrowkeysImage.scale.setTo(0.75);
+		//this.arrowkeysImage = this.add.image(20, this.game.height-200, 'atlas', 'arrowkeys');
+		//this.arrowkeysImage.scale.setTo(0.75);
+		// (accidentally lost this asset)
 
 		// Text
 		let textStyle = {

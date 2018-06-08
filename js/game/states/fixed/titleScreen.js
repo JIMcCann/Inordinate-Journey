@@ -1,7 +1,7 @@
 /*  game/states/fixed/titleScreen
 	A function that will start a title screen state.
 	Need art and audio for the title screen. */
-let HAVE_TS_ASSETS = false;
+let HAVE_TS_ASSETS = true;
 define(['game/states/fixed/meta', 'util/localStorageAvailable', 'game/states/fixed/eraseSave',
 		'game/states/functionCaller'],
 function (meta, localStorageAvailable, eraseSave) {

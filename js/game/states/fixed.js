@@ -50,11 +50,11 @@ function (game, keyDown, fadeOut, F) {
 			if (this.image) { // if we're displaying an image in the center of the screen:
 				let i = this.add.image(0, 0, 'atlas', this.image); // make it
 				i.x = (this.game.width - i.width)/2; // put it there
-				i.y = (this.game.height - i.height)/2;
+				i.y = (this.game.height - i.height)/3;
 			}
 			if (this.audio) // if we're playing audio:
 				game.audiosprite.play(this.audio, this.audioVolume); // play the audio
-			let textY = (this.game.height - this.textSize)*(this.image ? 3/4 : 1/2);
+			let textY = (this.game.height - this.textSize)*(this.image ? 2/3 : 1/2);
 			if (this.options) {
 				for (let i = 0; i < this.options.length; i++) {
 					let row = this.options[i];

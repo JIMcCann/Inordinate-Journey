@@ -6,6 +6,7 @@ define(['game/keyDown',
 		'game/states/skeletons/ticktimer',
 		'util/functional', 'util/vectorMath'], function (keyDown, portal, ticktimer, F, VM) {return {
 	spawnSaw: function () {
+		if (!this.game.hardMode) return;
 		// it's a saw
 		let plat = this.groups.hazards.create(400, 0, 'atlas', 'saw-1');
 		// it spins
