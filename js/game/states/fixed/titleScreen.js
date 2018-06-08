@@ -8,7 +8,7 @@ function (meta, localStorageAvailable, eraseSave) {
 	let retfunc = function () {
 		let retparam = {
 			image: HAVE_TS_ASSETS ? 'title-screen' : undefined,
-			audio: HAVE_TS_ASSETS ? 'title-screen' : undefined,
+			//audio: HAVE_TS_ASSETS ? 'title-screen' : undefined,
 			textSize: 24,
 			options: []
 		};
