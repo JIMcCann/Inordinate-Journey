@@ -91,9 +91,9 @@ define(['game/keyDown',
 			this.portal.body.velocity.y = 140;
 		});
 		// rather more often, and with increasing rate, spawn bads
-		this.addTicktimerEvent(200, function () {
+		this.addTicktimerEvent(135, function () {
 			this.spawnHaz();
-			return 0.981;
+			return 0.984;
 		}, this);
 
 		// Use arcade physics
