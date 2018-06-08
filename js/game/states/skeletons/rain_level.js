@@ -22,7 +22,10 @@ function (keyDown, portal, F, VM) {return {
 		// the asteroids are deadly
 		let projectile = this.groups.hazards.create(x, y, 'atlas', 'snowballs');
 		projectile.scale.setTo(2);
-		projectile.body.setCircle(5, 6, 6);
+		projectile.body.setCircle(
+			projectile.width/(2*projectile.scale.x),
+			0, 0
+		);
 		projectile.body.immovable = true;
 		projectile.body.velocity.x = -175 - Math.random()*150;
 		projectile.body.velocity.y = (-1*projectile.body.velocity.x) - Math.random()*120;
@@ -51,7 +54,7 @@ function (keyDown, portal, F, VM) {return {
 		// Setting a timer that will randomly generate platforms
 		// starting from the top of the screen using 'spawnPlatform'
 		this.projTimer = this.game.time.create(false);
-		this.projTimer.loop(500, function () {
+		this.projTimer.loop(1000, function () {
 			this.spawnProjectile(this.game.width+10,(Math.random()*(this.game.height+100))-250);
 		}, this);
 		this.projTimer.start();
@@ -64,6 +67,16 @@ function (keyDown, portal, F, VM) {return {
 			this.spawnPlatform(this.game.width,(this.game.height-200)-(Math.floor(Math.random()*3)*100));
 		}, this);
 		this.platTimer.start();
+
+		// add gradient night sky
+		let throwaway = this.add.image(0, 0, 'atlas', 'space-gradient');
+		let spacebg = this.add.tileSprite(0, 0, 500, throwaway.height, 'atlas', 'space-gradient');
+		throwaway.destroy();
+		let STATE = this;
+		spacebg.update = function () {
+			STATE.world.sendToBack(this);
+			this.tilePosition.x -= 1;
+		};
 	},
 	update: function () {
 		let speed = 2;
@@ -81,4 +94,7 @@ function (keyDown, portal, F, VM) {return {
 			this.portal.body.velocity.x = -12;
 		}
 	},
+	render: function () {
+		//this.groups.hazards.forEachExists(this.game.debug.body, this.game.debug);
+	}
 };});

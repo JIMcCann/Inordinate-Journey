@@ -3,15 +3,19 @@
 	Need art and audio for the title screen. */
 let HAVE_TS_ASSETS = true;
 define(['game/states/fixed/meta', 'util/localStorageAvailable', 'game/states/fixed/eraseSave',
-		'game/states/fixed/credits',
+		'game/states/fixed/credits', 'game/states/fixed/controls', 'game/states/fixed/graderNote',
 		'game/states/functionCaller'],
-function (meta, localStorageAvailable, eraseSave, credits) {
+function (meta, localStorageAvailable, eraseSave, credits, controls, graderNote) {
 	let retfunc = function () {
 		let retparam = {
 			image: HAVE_TS_ASSETS ? 'title-screen' : undefined,
 			//audio: HAVE_TS_ASSETS ? 'title-screen' : undefined,
 			textSize: 24,
 			options: []
+		};
+		retparam.options[retparam.options.length] = {
+			name: 'NOTE TO GRADERS',
+			nextState: ['functionCaller', graderNote, retfunc]
 		};
 		if (localStorageAvailable) {
 			if (!parseInt(localStorage.getItem('deathCount')))
@@ -70,6 +74,10 @@ function (meta, localStorageAvailable, eraseSave, credits) {
 				}
 			};
 		}
+		retparam.options[retparam.options.length] = {
+			name: 'Controls',
+			nextState: ['functionCaller', controls, retfunc]
+		};
 		retparam.options[retparam.options.length] = {
 			name: 'Credits',
 			nextState: ['functionCaller', credits, retfunc]
