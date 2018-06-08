@@ -32,11 +32,13 @@ define(['game/assetPath', 'game/game', 'game/LevelOrder', 'util/functional'], fu
 		create: function () {
 			try {
 				game.audiosprite = game.make.audioSprite('audiosprite'); // try to make audiosprite object
+				game.audiospriteValid = true;
 			} catch (e) {
 				game.audiosprite = { // if there is none, create a dummy to avoid errors
 					play: function () {},
 					stop: function () {}
 				};
+				game.audiospriteValid = false;
 			}
 			let t = game.add.text(0, 0, 'Decoding game audio.\nPlease wait...', {
 				fontSize: 16, fill: '#ffffff'
@@ -52,7 +54,7 @@ define(['game/assetPath', 'game/game', 'game/LevelOrder', 'util/functional'], fu
 			t.y = (game.height - t.height)/2;
 		},
 		update: function () {
-			if (game.cache.isSoundReady('audiosprite'))
+			if (!game.audiospriteValid || game.cache.isSoundReady('audiosprite'))
 				F.curry(game.state.start, this.nextState,
 					true, false).apply(game.state, this.otherArgs);
 		}
