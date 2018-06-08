@@ -3,8 +3,9 @@
 	Need art and audio for the title screen. */
 let HAVE_TS_ASSETS = true;
 define(['game/states/fixed/meta', 'util/localStorageAvailable', 'game/states/fixed/eraseSave',
+		'game/states/fixed/credits',
 		'game/states/functionCaller'],
-function (meta, localStorageAvailable, eraseSave) {
+function (meta, localStorageAvailable, eraseSave, credits) {
 	let retfunc = function () {
 		let retparam = {
 			image: HAVE_TS_ASSETS ? 'title-screen' : undefined,
@@ -69,6 +70,10 @@ function (meta, localStorageAvailable, eraseSave) {
 				}
 			};
 		}
+		retparam.options[retparam.options.length] = {
+			name: 'Credits',
+			nextState: ['functionCaller', credits, retfunc]
+		};
 		if (localStorageAvailable && parseInt(localStorage.getItem('currentLevel'))) {
 			retparam.options[retparam.options.length] = {
 				name: 'Erase Save Data',

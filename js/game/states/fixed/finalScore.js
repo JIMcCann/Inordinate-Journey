@@ -1,8 +1,9 @@
 /*	game/states/fixed/finalScore
 	CONGRATULATIONS! YOU WIN! */
 define(['game/states/fixed/meta', 'game/states/fixed/credits', 'game/states/functionCaller',
+		'game/states/fixed/titleScreen',
 		'util/localStorageAvailable'],
-function (meta, credits, functionCaller, localStorageAvailable) {
+function (meta, credits, functionCaller, titleScreen, localStorageAvailable) {
 	let summary = function () {
 		let t = 'CONGRATULATIONS!\n'
 		if (localStorageAvailable) {
@@ -28,7 +29,7 @@ function (meta, credits, functionCaller, localStorageAvailable) {
 				localStorage.setItem('deathCount', 0);
 				localStorage.setItem('hardMode', 'yes');
 			}
-			credits();
+			credits(titleScreen);
 		}]
 	});
 });
