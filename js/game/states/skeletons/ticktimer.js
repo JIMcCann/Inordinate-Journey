@@ -28,8 +28,10 @@ define({
 		let toRemove = []; // prepare a queue for events to get rid of
 		for (let e of this.ticktimerEvents) if ((this.ticktimerTicks % e.frequency) < 1) {
 			// do all the events
-			let result = e.callback.call(this, this.ticktimerTicks);
-			if (result) e.frequency *= result; // scale frequency if number returned
+			let result = e.callback.call(this, this.game.hardMode ? this.ticktimerTicks : 0);
+			if (result && this.game.hardMode)
+				e.frequency *= result; // scale frequency if number returned
+					// but only in hard mode
 			else if (result === false) toRemove[toRemove.length] = e; // enqueue for deletion if false returned
 		}
 		let toKeep = []; // prepare a queue for events NOT to get rid of

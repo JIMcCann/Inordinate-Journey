@@ -20,7 +20,9 @@ define(['util/vectorMath'], function (VM) {return {
 				fball.scale.x *= -1;
 			}
 			// possibility of splitting off / self-replicating / "mitosis" or whatever
-			if (Math.random() < 0.005) {
+			let prob = 0.005;
+			if (!this.game.hardMode) prob /= 2;
+			if (Math.random() < prob) {
 				if (this.scale.y > 1) { // but only if big enough
 					let parts = Math.ceil(Math.random()*5) + 1; // random number of children (up to 6)
 					for (let i = 0; i < parts; i++) { // add them all

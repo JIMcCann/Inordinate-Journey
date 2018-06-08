@@ -4,10 +4,10 @@
 	Controls depend on direction of gravity.
 	If there's no gravity, can move freely in any direction. */
 let DEBUG = false;
-let DEBUG_CHEATING = true; // if we can cheat, we can press Space to advance levels
+let DEBUG_CHEATING = true; // if we can cheat, we can press P to advance levels
 define(['game/game', 'game/keyDown', 'game/states/fadeOut', 'util/functional',
-	'util/vectorMath'],
-function (game, keyDown, fadeOut, F, VM) {return {
+	'util/vectorMath', 'util/localStorageAvailable'],
+function (game, keyDown, fadeOut, F, VM, localStorageAvailable) {return {
 	create: function () {
 		this.player = this.add.sprite(100, 0, 'atlas'); // move it during state creation, top left corner not ideal
 		this.player.scale.setTo(1.5, 1.5); // change this depending on size of real assets
@@ -84,6 +84,8 @@ function (game, keyDown, fadeOut, F, VM) {return {
 	playerDie: function () {
 		// Stop audio and reset state
 		this.game.audiosprite.stop();
+		if (localStorageAvailable)
+			localStorage.setItem('deathCount', parseInt(localStorage.getItem('deathCount')) + 1);
 		F.curry(fadeOut, this.state.current).apply(null, this.initargs);
 	},
 	playerCollideHazards: function () {
@@ -93,9 +95,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
 			this.game.physics.arcade.overlap(this.player, this.groups.hazards,
 				function () {
 					// then restart the level when we touch them
-					// (death could be done more elegantly but we can worry about that later)
-					STATE.game.audiosprite.stop();
-					F.curry(fadeOut, STATE.state.current).apply(null, STATE.initargs);
+					STATE.playerDie();
 				});
 	},
 	playerRecalculateReldirs: function () {
@@ -295,7 +295,7 @@ function (game, keyDown, fadeOut, F, VM) {return {
 			this.playerDoTopDownPhysics();
 		else this.playerDoPlatformerPhysics();
 		// allow cheating if appropriate (e.g for testing)
-		if (DEBUG_CHEATING && keyDown('spacebar'))
+		if (DEBUG_CHEATING && keyDown('p'))
 			this.game.levelOrder.nextLevel();
 	},
 	render: function () {

@@ -15,7 +15,7 @@ define(['game/assetPath', 'game/game', 'game/LevelOrder', 'util/functional'], fu
 		preload: function () {
 			Phaser.Canvas.setSmoothingEnabled(game.context, false); // no smooth scaling thanks
 			game.time.advancedTiming = true; // in case we need the FPS for anything
-			game.stage.backgroundColor = '#8B4513'; // dark brown background (might change this?)
+			game.stage.backgroundColor = '#000000';
 			game.load.atlas('atlas', // load the sprite atlas
 				assetPath + '/graphics/atlas.png',
 				assetPath + '/graphics/atlas.json',
@@ -38,12 +38,23 @@ define(['game/assetPath', 'game/game', 'game/LevelOrder', 'util/functional'], fu
 					stop: function () {}
 				};
 			}
+			let t = game.add.text(0, 0, 'Decoding game audio.\nPlease wait...', {
+				fontSize: 16, fill: '#ffffff'
+			});
+			let coroutine = (function* () {
+				for (;;) {
+					for (let i = 0; i < 30; i++) yield;
+					t.text += '.';
+				}
+			})();
+			t.update = function () {coroutine.next();};
+			t.x = (game.width - t.width)/2;
+			t.y = (game.height - t.height)/2;
 		},
 		update: function () {
-			// as soon as the preload and create phases are done, jump to the next state
-			// (given in init)
-			F.curry(game.state.start, this.nextState,
-				true, false).apply(game.state, this.otherArgs);
+			if (game.cache.isSoundReady('audiosprite'))
+				F.curry(game.state.start, this.nextState,
+					true, false).apply(game.state, this.otherArgs);
 		}
 	});
 	// export a function that simply forwards all its arguments to the setup state's init

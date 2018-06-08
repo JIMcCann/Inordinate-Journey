@@ -4,7 +4,7 @@
 	as of the current frame. */
 define(['game/game'], function (game) {
 	// We care about the spacebar, the arrowkeys, and WSAD.
-	let keyArr = ['spacebar', 'up', 'down', 'left', 'right', 'w', 's', 'a', 'd'];
+	let keyArr = ['spacebar', 'p', 'up', 'down', 'left', 'right', 'w', 's', 'a', 'd'];
 	// But we haven't loaded them yet, so the keys object itself is empty.
 	let keys = {};
 	// Here we define equivalencies between arrowkeys and WSAD.

@@ -113,7 +113,7 @@ function (keyDown, portal, spacebg, triangle, fireball, ticktimer, F, VM) {retur
 			30);
 		this.triangularDude.body.velocity.setTo(triangdist.x, triangdist.y);
 		// shoot fireballs
-		if (Math.random() < 0.007) {
+		if (Math.random() < 0.007 && this.game.hardMode) {
 			let fball = this.spawnFireball();
 			fball.x = this.triangularDude.x;
 			fball.y = this.triangularDude.y;

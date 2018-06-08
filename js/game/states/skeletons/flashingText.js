@@ -3,6 +3,7 @@
 	The text knows on its own how to flash and go away. */
 define({
 	flashingText: function (str) {
+		if (!this.game.hardMode) return;
 		// add the text
 		let text = this.add.text(60, 60, str, {
 			fontSize: 18, fill: '#ff3333'

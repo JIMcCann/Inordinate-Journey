@@ -99,7 +99,11 @@ function (keyDown, portal, fireball, ticktimer, F, VM) {return {
 		});
 	},
 	update: function () {
-		if (Math.random() < 0.004) this.spawnFireball().body.velocity.y *= 0.9; // chance to spew fire
+		let prob = 0.004;
+		if (!this.game.hardMode) prob /= 2;
+		let velscale = 0.9;
+		if (!this.game.hardMode) velscale *= 3/4;
+		if (Math.random() < prob) this.spawnFireball().body.velocity.y *= velscale; // chance to spew fire
 
 		// scroll backgrounds
 		this.back1.tilePosition.y +=1;
