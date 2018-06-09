@@ -2,7 +2,7 @@
 
 ## Version
 
-Version 1.1, May 2018. Written by Benjamin I. McCann, bimccann@ucsc.edu.
+Version 1.2, May 2018. Written by Benjamin I. McCann, bimccann@ucsc.edu.
 I, the author of This License, hereby explicitly forfeit the License itself
 to the public domain.
 
@@ -16,14 +16,17 @@ the following entitlements, freely exercisable without limit:
 * To modify the Software.
 * To use the Software in any way
   that does not otherwise violate the terms of This License.
-* To redistribute the Software, freely or for pay,
+* To redistribute the Software noncommercially,
   subject to restrictions specified below.
-* To redistribute copies of the Software, freely or for pay,
+* To redistribute copies of the Software noncommercially,
   modified or verbatim, subject to restrictions specified below.
 * To relicense copies of the Software, modified or verbatim,
   subject to restrictions specified below.
 
 ## Restrictions
+
+You may not redistribute this Software, or copies of the Software,
+modified or verbatim, for commercial purposes.
 
 Until July 1st, 2018,
 This License explicitly *denies* You the following privileges:
@@ -60,8 +63,8 @@ to the warranties of merchantability, fitness for a particular purpose and
 noninfringement. In no event shall the authors or copyright holders be
 liable for any claim, damages or other liability, whether in an action of
 contract, tort or otherwise, arising from, out of or in connection with
-the Software or the use of other dealings in the Software.[^fn]
+the Software or the use of other dealings in the Software.[^fn1]
 
-[^fn]: This portion of the License attributed
+[^fn1]: This portion of the License attributed
     to Massachusetts Institute of Technology,
     with some modifications.
