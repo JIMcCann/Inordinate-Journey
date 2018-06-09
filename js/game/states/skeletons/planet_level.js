@@ -22,7 +22,7 @@ function (keyDown, portal, spacebg, triangle, fireball, ticktimer, F, VM) {retur
 		return planet; // return for further manipulation
 	},
 	create: function () {
-		this.game.audiosprite.play('bgm-moon');
+		this.game.audiosprite.play('bgm-planet');
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.turnOffLightLanding = true; // avoid annoying glitch whenn player lands repeatedly
 		this.addSkel(fireball); // will need to spawn fireballs
