@@ -37,7 +37,7 @@ function (keyDown, portal, F, VM, snow) {return {
 
 		// let it snow
 		this.addSkel(snow);
-		this.game.audiosprite.play('wind');
+		this.game.audiosprite.play('wind', 0.25);
 		// Positioning the player at the start of the level
 		this.player.x = this.game.width/4;
 		this.player.y = this.game.height-150;
