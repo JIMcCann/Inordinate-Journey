@@ -3,6 +3,10 @@
 Hi. We're Team Triangle.
 Welcome to our class project for UCSC CMPM/ARTG 120 Spring 2018.
 
+## We're Live!
+
+[Click here](https://bryanarvizu.itch.io/inordinate-journey) to play Inordinate Journey on the web.
+
 ## Important license info
 
 Before using any of our code, please take a look at LICENSE.md.
