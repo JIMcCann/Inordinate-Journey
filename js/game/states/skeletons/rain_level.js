@@ -3,8 +3,9 @@
 	When we have the proper assets for this level, it will be a snow themed
 	denouement to the game, in which the player must simply run along a field of snow scrolling left
 	while dodging falling snowballs */
-define(['game/keyDown', 'game/states/skeletons/portal', 'util/functional', 'util/vectorMath'],
-function (keyDown, portal, F, VM) {return {
+define(['game/keyDown', 'game/states/skeletons/portal', 'util/functional', 'util/vectorMath',
+		'game/states/skeletons/snow'],
+function (keyDown, portal, F, VM, snow) {return {
 	spawnPlatform: function (x, y) {
 		let plat = this.groups.solids.create(x, y, 'atlas', 'snowplatform');
 		// the platforms scroll left
@@ -33,6 +34,10 @@ function (keyDown, portal, F, VM) {return {
 	},
 	create: function () {
 		this.portal = undefined; // SSC glitch workaround
+
+		// let it snow
+		this.addSkel(snow);
+		this.game.audiosprite.play('wind');
 		// Positioning the player at the start of the level
 		this.player.x = this.game.width/4;
 		this.player.y = this.game.height-150;
