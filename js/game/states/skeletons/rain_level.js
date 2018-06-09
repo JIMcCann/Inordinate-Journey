@@ -82,6 +82,16 @@ function (keyDown, portal, F, VM, snow) {return {
 			STATE.world.sendToBack(this);
 			this.tilePosition.x -= 1;
 		};
+
+		// add tree line
+		throwaway = this.add.image(0, 0, 'atlas', 'tree-line');
+		let treeline = this.add.tileSprite(0, this.game.height - 100 - throwaway.height + 16,
+			500, throwaway.height, 'atlas', 'tree-line');
+		throwaway.destroy();
+		treeline.update = function () {
+			this.tilePosition.x -= 1.75;
+		};
+		this.world.sendToBack(treeline);
 	},
 	update: function () {
 		let speed = 2;
